@@ -15,10 +15,6 @@ function readString(value: unknown): string | undefined {
   return typeof value === 'string' ? value.trim() : undefined
 }
 
-function isRecipeDifficulty(value: unknown): value is RecipeDifficulty {
-  return value === 1 || value === 2 || value === 3
-}
-
 /**
  * 등록/수정 요청 본문(RecipeInput)을 검증해 RecipeContent로 변환한다.
  * 잘못된 항목이 있으면 모든 오류 메시지를 담아 400 오류를 던진다.
