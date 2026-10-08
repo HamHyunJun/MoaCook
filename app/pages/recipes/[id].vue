@@ -1,95 +1,140 @@
 <template>
-  <article v-if="recipe" class="recipe-detail">
+  <article class="recipe-detail">
     <div class="top-bar">
-      <NuxtLink :to="{ path: '/', query: { category: recipe.category } }" class="back-link">
+      <a :href="backHref" class="back-link" @click.prevent="goBack">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-        {{ recipe.category }} 레시피 목록
-      </NuxtLink>
-      <NuxtLink v-if="isAdmin" :to="`/admin/recipes/${recipe.id}/edit`" class="edit-link">수정하기</NuxtLink>
+        레시피 목록
+      </a>
+      <NuxtLink v-if="isAdmin && recipe" :to="`/admin/recipes/${recipe.id}/edit`" class="edit-link">수정하기</NuxtLink>
     </div>
 
-    <header class="summary">
+    <!-- 목록에서 넘어올 때는 목록에 있던 사진·이름을 먼저 보여 주고, 나머지는 받는 동안 자리 표시를 둔다 -->
+    <header v-if="summary" class="summary">
       <div class="hero">
-        <img :src="recipe.image" :alt="recipe.name" class="hero-image">
+        <img :src="summary.image" :alt="summary.name" class="hero-image">
       </div>
       <div class="summary-body">
-        <span class="category">{{ recipe.category }}</span>
-        <h1 class="name">{{ recipe.name }}</h1>
-        <p class="description">{{ recipe.description }}</p>
+        <span class="category">{{ summary.category }}</span>
+        <h1 class="name">{{ summary.name }}</h1>
+        <p class="description">{{ summary.description }}</p>
         <dl class="meta">
           <div class="meta-item">
             <dt>난이도</dt>
-            <dd><DifficultyBadge :difficulty="recipe.difficulty" /></dd>
+            <dd><DifficultyBadge :difficulty="summary.difficulty" /></dd>
           </div>
           <div class="meta-item">
             <dt>조리시간</dt>
-            <dd>{{ recipe.cookingTime }}분</dd>
+            <dd>{{ summary.cookingTime }}분</dd>
           </div>
           <div class="meta-item">
             <dt>재료</dt>
-            <dd>{{ recipe.ingredients.length }}가지</dd>
+            <dd v-if="recipe">{{ recipe.ingredients.length }}가지</dd>
+            <dd v-else><span class="skeleton meta-skeleton" /></dd>
           </div>
         </dl>
       </div>
     </header>
+    <header v-else class="summary" aria-hidden="true">
+      <div class="hero skeleton" />
+      <div class="summary-body">
+        <span class="skeleton text-skeleton" style="width: 56px" />
+        <span class="skeleton text-skeleton title-skeleton" />
+        <span class="skeleton text-skeleton" />
+        <span class="skeleton text-skeleton" style="width: 60%" />
+      </div>
+    </header>
 
-    <section class="section" aria-labelledby="ingredients-title">
-      <h2 id="ingredients-title" class="section-title">
-        재료 <span class="section-count">{{ recipe.ingredients.length }}</span>
-      </h2>
-      <ul class="ingredients">
-        <li v-for="ingredient in recipe.ingredients" :key="ingredient.id" class="ingredient">
-          <span class="ingredient-name">{{ ingredient.name }}</span>
-          <span class="ingredient-amount">{{ ingredient.amount }}</span>
-        </li>
-      </ul>
-    </section>
+    <template v-if="recipe">
+      <section class="section" aria-labelledby="ingredients-title">
+        <h2 id="ingredients-title" class="section-title">
+          재료 <span class="section-count">{{ recipe.ingredients.length }}</span>
+        </h2>
+        <ul class="ingredients">
+          <li v-for="ingredient in recipe.ingredients" :key="ingredient.id" class="ingredient">
+            <span class="ingredient-name">{{ ingredient.name }}</span>
+            <span class="ingredient-amount">{{ ingredient.amount }}</span>
+          </li>
+        </ul>
+      </section>
 
-    <section class="section" aria-labelledby="steps-title">
-      <h2 id="steps-title" class="section-title">
-        조리 과정 <span class="section-count">{{ sortedSteps.length }}</span>
-      </h2>
-      <ol class="steps">
-        <li v-for="step in sortedSteps" :key="step.id" class="step">
-          <span class="step-number" aria-hidden="true">{{ step.order }}</span>
-          <div class="step-body">
-            <p class="step-description">{{ step.description }}</p>
-            <img
-              v-if="step.image"
-              :src="step.image"
-              :alt="`${recipe.name} 조리 과정 ${step.order}`"
-              class="step-image"
-              loading="lazy"
-            >
-          </div>
-        </li>
-      </ol>
-    </section>
+      <section class="section" aria-labelledby="steps-title">
+        <h2 id="steps-title" class="section-title">
+          조리 과정 <span class="section-count">{{ sortedSteps.length }}</span>
+        </h2>
+        <ol class="steps">
+          <li v-for="step in sortedSteps" :key="step.id" class="step">
+            <span class="step-number" aria-hidden="true">{{ step.order }}</span>
+            <div class="step-body">
+              <p class="step-description">{{ step.description }}</p>
+              <img
+                v-if="step.image"
+                :src="step.image"
+                :alt="`${recipe.name} 조리 과정 ${step.order}`"
+                class="step-image"
+                loading="lazy"
+              >
+            </div>
+          </li>
+        </ol>
+      </section>
 
-    <RecipeYoutube :query="recipe.youtubeQuery || recipe.name" class="section" />
+      <RecipeYoutube :query="recipe.youtubeQuery || recipe.name" class="section" />
+    </template>
+    <div v-else class="section" aria-hidden="true">
+      <span class="skeleton text-skeleton title-skeleton" style="width: 120px" />
+      <div class="rows-skeleton">
+        <span v-for="index in 6" :key="index" class="skeleton row-skeleton" />
+      </div>
+    </div>
   </article>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
+const router = useRouter()
 const { isAdmin } = useAdmin()
+const { lastListPath, findSummary } = useRecipeList()
 const id = computed<string>(() => String(route.params.id))
 
-const { data: recipe, error } = await useFetch<Recipe>(() => `/api/recipes/${encodeURIComponent(id.value)}`)
+// 데이터를 받는 동안에도 바로 화면을 넘기고 자리 표시를 보여 준다 (서버 렌더링 때는 다 받은 뒤 그린다)
+const { data: recipe, error } = await useFetch<Recipe>(() => `/api/recipes/${encodeURIComponent(id.value)}`, {
+  lazy: true,
+})
 
-if (error.value) {
-  throw createError({
-    statusCode: error.value.statusCode ?? 500,
-    statusMessage: error.value.statusCode === 404 ? '레시피를 찾을 수 없습니다.' : '레시피를 불러오지 못했습니다.',
+const summary = computed<RecipeSummary | undefined>(() => recipe.value ?? findSummary(id.value))
+
+function toPageError(statusCode: number | undefined) {
+  return createError({
+    statusCode: statusCode ?? 500,
+    statusMessage: statusCode === 404 ? '레시피를 찾을 수 없습니다.' : '레시피를 불러오지 못했습니다.',
     fatal: true,
   })
 }
+
+if (error.value) throw toPageError(error.value.statusCode)
+
+watch(error, (value) => {
+  if (value) showError(toPageError(value.statusCode))
+})
 
 const sortedSteps = computed<RecipeStep[]>(() =>
   [...(recipe.value?.steps ?? [])].sort((a, b) => a.order - b.order),
 )
 
-useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCook') })
+// 목록에서 들어왔다면 브라우저 뒤로 가기로 돌아가서 필터와 스크롤 위치를 그대로 살린다.
+// 주소로 바로 들어왔다면 마지막으로 본 목록(없으면 전체 목록)으로 이동한다.
+const backHref = computed<string>(() => lastListPath.value)
+
+function goBack(): void {
+  const back = router.options.history.state.back
+  if (typeof back === 'string' && back.split('?')[0] === '/') {
+    router.back()
+    return
+  }
+  navigateTo(lastListPath.value)
+}
+
+useHead({ title: () => (summary.value ? `${summary.value.name} | MoaCook` : 'MoaCook') })
 </script>
 
 <style lang="scss" scoped>
@@ -249,6 +294,38 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   font-size: $font-size-h2;
   font-weight: 800;
   letter-spacing: $tracking-snug;
+}
+
+.meta-skeleton {
+  display: inline-block;
+  width: 40px;
+  height: 18px;
+  border-radius: 6px;
+  vertical-align: middle;
+}
+
+.text-skeleton {
+  display: block;
+  height: 16px;
+  border-radius: 6px;
+}
+
+.title-skeleton {
+  width: 50%;
+  height: 34px;
+}
+
+.rows-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.row-skeleton {
+  display: block;
+  height: 48px;
+  border-radius: $radius-md;
 }
 
 .section-count {

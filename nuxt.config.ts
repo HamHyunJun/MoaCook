@@ -16,9 +16,10 @@ export default defineNuxtConfig({
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        // 예전 기본 아이콘이 브라우저에 남아 있지 않도록 주소에 버전을 붙인다
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg?v=2' },
+        { rel: 'icon', type: 'image/x-icon', sizes: '48x48', href: '/favicon.ico?v=2' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png?v=2' },
         // 휴대폰에서 '홈 화면에 추가'하면 앱처럼 열리도록 하는 설정
         { rel: 'manifest', href: '/manifest.webmanifest' },
         // 본문 글꼴 Pretendard (public/fonts, 화면에 쓰인 글자 묶음만 내려받는 방식)
@@ -43,6 +44,10 @@ export default defineNuxtConfig({
     storage: {
       recipes: { driver: 'fs', base: './.data/recipes' },
       uploads: { driver: 'fs', base: './.data/uploads' },
+    },
+    // Vercel 서버를 서울(icn1)에 두어 Supabase(서울)와 사용자 모두에게 가깝게 한다
+    vercel: {
+      functions: { regions: ['icn1'] },
     },
   },
   routeRules: {

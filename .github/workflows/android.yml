@@ -6,7 +6,12 @@ name: Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [main, rebrand]
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/android.yml'
+  # PR에서는 빌드가 되는지만 확인하고 릴리스에는 올리지 않는다
+  pull_request:
     paths:
       - 'mobile/**'
       - '.github/workflows/android.yml'
@@ -83,6 +88,7 @@ jobs:
           path: ${{ runner.temp }}/MoaCook.apk
 
       - name: 릴리스에 APK 올리기
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

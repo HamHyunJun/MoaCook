@@ -57,11 +57,17 @@
     </div>
 
     <div class="result-bar">
-      <span>레시피 <strong>{{ recipes?.length ?? 0 }}</strong>개</span>
+      <span v-if="loading" class="result-loading">레시피를 불러오는 중…</span>
+      <span v-else>레시피 <strong>{{ recipes?.length ?? 0 }}</strong>개</span>
       <button v-if="searchQuery.q || hasFilter" type="button" class="reset-button" @click="resetQuery">조건 초기화</button>
     </div>
 
-    <p v-if="error" class="message">레시피를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+    <ul v-if="loading" class="recipe-grid" aria-hidden="true">
+      <li v-for="index in 8" :key="index">
+        <RecipeCardSkeleton />
+      </li>
+    </ul>
+    <p v-else-if="error && !recipes" class="message">레시피를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
     <p v-else-if="!recipes?.length" class="message">
       {{ searchQuery.q || hasFilter ? '조건에 맞는 레시피가 없습니다.' : '등록된 레시피가 없습니다.' }}
     </p>
@@ -115,8 +121,35 @@ const title = computed<string>(() => {
   return category ? `${category} 레시피` : '오늘은 뭘 만들어 볼까요?'
 })
 
-const { data: recipes, error } = await useFetch<RecipeSummary[]>('/api/recipes', {
+const { cache, lastListPath } = useRecipeList()
+const nuxtApp = useNuxtApp()
+const cacheKey = computed<string>(() => new URLSearchParams(toRouteQuery(searchQuery.value)).toString())
+
+const { data: recipes, error, status, refresh } = await useFetch<RecipeSummary[]>('/api/recipes', {
   query: searchQuery,
+  lazy: true,
+  // 한 번 본 조건의 목록은 기억해 둔 것을 바로 보여 준다 (직접 새로고침할 때만 다시 받음)
+  getCachedData: (key, app, { cause }) => {
+    if (cause === 'refresh:manual') return undefined
+    return app.isHydrating ? app.payload.data[key] : cache.value[cacheKey.value]
+  },
+})
+
+const loading = computed<boolean>(() => !recipes.value && status.value === 'pending')
+
+watch(recipes, (list) => {
+  if (list) cache.value[cacheKey.value] = list
+}, { immediate: true })
+
+// 상세 화면의 '목록으로' 버튼이 이 주소(필터 포함)로 돌아올 수 있게 기억한다
+watch(() => route.fullPath, (path) => {
+  lastListPath.value = path
+}, { immediate: true })
+
+// 다른 화면에서 돌아왔을 때는 기억해 둔 목록을 먼저 보여 주고, 바뀐 내용이 있으면 뒤에서 받아 갱신한다
+const restoredFromCache = !nuxtApp.isHydrating && Boolean(cache.value[cacheKey.value])
+onMounted(() => {
+  if (restoredFromCache) refresh()
 })
 
 function toRouteQuery(query: RecipeSearchQuery): Record<string, string> {
@@ -200,7 +233,9 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   font-weight: 800;
   letter-spacing: $tracking-tight;
   line-height: 1.25;
-  word-break: break-all;
+  // 한글은 단어 단위로 줄을 바꾸고, 긴 검색어처럼 한 단어가 너무 길 때만 중간에서 끊는다
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .subtitle {
@@ -277,6 +312,10 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   }
 }
 
+.result-loading {
+  color: $muted-text-color;
+}
+
 .reset-button {
   padding: 0;
   border: none;
@@ -316,7 +355,10 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
     padding: 28px 16px 32px;
   }
 
+  // 좁은 화면에서는 등록 버튼이 제목 영역을 좁히지 않도록 아래 줄로 내린다
   .intro {
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 24px;
   }
 
