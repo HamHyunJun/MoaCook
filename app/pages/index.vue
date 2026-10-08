@@ -31,24 +31,22 @@
       </div>
 
       <div class="selects">
-        <label class="select-field">
-          <span class="visually-hidden">난이도</span>
-          <select :value="searchQuery.difficulty ?? ''" @change="onDifficultyChange">
-            <option value="">난이도 전체</option>
-            <option v-for="option in DIFFICULTY_OPTIONS" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-        </label>
-        <label class="select-field">
-          <span class="visually-hidden">조리시간</span>
-          <select :value="searchQuery.maxTime ?? ''" @change="onMaxTimeChange">
-            <option value="">조리시간 전체</option>
-            <option v-for="minutes in maxTimeOptions" :key="minutes" :value="minutes">
-              {{ minutes }}분 이내
-            </option>
-          </select>
-        </label>
+        <SelectDropdown
+          :model-value="searchQuery.difficulty"
+          :options="DIFFICULTY_OPTIONS"
+          label="난이도"
+          all-label="난이도 전체"
+          class="select"
+          @update:model-value="difficulty => updateQuery({ difficulty })"
+        />
+        <SelectDropdown
+          :model-value="searchQuery.maxTime"
+          :options="maxTimeOptions"
+          label="조리시간"
+          all-label="조리시간 전체"
+          class="select"
+          @update:model-value="maxTime => updateQuery({ maxTime })"
+        />
       </div>
     </div>
 
@@ -75,6 +73,11 @@ interface DifficultyOption {
   label: string
 }
 
+interface MaxTimeOption {
+  value: number
+  label: string
+}
+
 const DIFFICULTY_OPTIONS: DifficultyOption[] = [
   { value: 1, label: '쉬움' },
   { value: 2, label: '보통' },
@@ -91,11 +94,12 @@ const hasFilter = computed<boolean>(() =>
 )
 
 // 주소로 직접 들어온 조리시간 값도 선택 상태로 보이도록 목록에 포함한다
-const maxTimeOptions = computed<number[]>(() => {
+const maxTimeOptions = computed<MaxTimeOption[]>(() => {
   const current = searchQuery.value.maxTime
-  return current && !MAX_TIME_OPTIONS.includes(current)
+  const minutes = current && !MAX_TIME_OPTIONS.includes(current)
     ? [...MAX_TIME_OPTIONS, current].sort((a, b) => a - b)
     : MAX_TIME_OPTIONS
+  return minutes.map(value => ({ value, label: `${value}분 이내` }))
 })
 
 const title = computed<string>(() => {
@@ -124,20 +128,6 @@ function updateQuery(patch: Partial<RecipeSearchQuery>): void {
 
 function resetQuery(): void {
   navigateTo({ path: '/' }, { replace: true })
-}
-
-function readSelectNumber(event: Event): number | undefined {
-  const value = Number((event.target as HTMLSelectElement).value)
-  return value > 0 ? value : undefined
-}
-
-function onDifficultyChange(event: Event): void {
-  const value = readSelectNumber(event)
-  updateQuery({ difficulty: isRecipeDifficulty(value) ? value : undefined })
-}
-
-function onMaxTimeChange(event: Event): void {
-  updateQuery({ maxTime: readSelectNumber(event) })
 }
 
 useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${title.value} | MoaCook` : 'MoaCook') })
@@ -230,32 +220,6 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   gap: 8px;
 }
 
-.select-field select {
-  padding: 9px 36px 9px 16px;
-  border: 1px solid $line-color;
-  border-radius: 999px;
-  background: $surface-color url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237F879E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
-  color: $text-color;
-  font-size: $font-size-small;
-  font-weight: 600;
-  cursor: pointer;
-  appearance: none;
-
-  &:focus-visible {
-    outline: 2px solid $point-color;
-    outline-offset: 2px;
-  }
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
 .result-bar {
   display: flex;
   justify-content: space-between;
@@ -327,11 +291,7 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
     padding: 0 16px;
   }
 
-  .selects select {
-    width: 100%;
-  }
-
-  .select-field {
+  .select {
     flex: 1;
   }
 
