@@ -8,7 +8,7 @@ create table if not exists public.recipes (
   name text not null,
   image text not null,
   description text not null,
-  category text not null check (category in ('한식', '중식', '일식', '양식', '비건')),
+  category text not null,
   difficulty smallint not null check (difficulty between 1 and 3),
   cooking_time integer not null check (cooking_time > 0),
   ingredients jsonb not null default '[]'::jsonb,
@@ -19,6 +19,11 @@ create table if not exists public.recipes (
 );
 
 create index if not exists recipes_created_at_idx on public.recipes (created_at);
+
+-- 카테고리 목록 (카테고리를 추가하면 여기와 shared/types/recipe.ts를 함께 고치고 이 파일을 다시 실행한다)
+alter table public.recipes drop constraint if exists recipes_category_check;
+alter table public.recipes add constraint recipes_category_check
+  check (category in ('한식', '중식', '일식', '양식', '비건', '캠핑', '자취'));
 
 -- 앱 설정 (초기 레시피 데이터 버전 등)
 create table if not exists public.app_settings (
