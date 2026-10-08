@@ -81,7 +81,7 @@
       <ol class="rows">
         <li v-for="(step, index) in form.steps" :key="step.key" class="row step-row">
           <span class="step-number">{{ String(index + 1).padStart(2, '0') }}</span>
-          <textarea v-model="step.description" rows="2" maxlength="2000" :aria-label="`${index + 1}번째 조리 과정`" placeholder="조리 과정을 입력해 주세요." required />
+          <textarea v-model="step.description" rows="3" maxlength="2000" :aria-label="`${index + 1}번째 조리 과정`" placeholder="조리 과정을 입력해 주세요." required />
           <div class="step-actions">
             <button type="button" class="icon-button" :disabled="index === 0" :aria-label="`${index + 1}번째 과정 위로`" @click="moveRow(form.steps, index, -1)">↑</button>
             <button type="button" class="icon-button" :disabled="index === form.steps.length - 1" :aria-label="`${index + 1}번째 과정 아래로`" @click="moveRow(form.steps, index, 1)">↓</button>
