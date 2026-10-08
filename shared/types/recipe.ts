@@ -1,5 +1,5 @@
-/** 레시피 카테고리 (조리법 분류 + 캠핑·자취 같은 상황별 분류) */
-export const RECIPE_CATEGORIES = ['한식', '중식', '일식', '양식', '비건', '캠핑', '자취'] as const
+/** 레시피 카테고리 */
+export const RECIPE_CATEGORIES = ['한식', '중식', '일식', '양식', '비건'] as const
 
 export type RecipeCategory = (typeof RECIPE_CATEGORIES)[number]
 

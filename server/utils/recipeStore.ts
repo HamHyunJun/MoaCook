@@ -10,7 +10,8 @@ let seeding: Promise<void> | undefined
 /**
  * 초기 데이터를 저장소에 반영한다.
  * - 처음 사용할 때: 초기 레시피를 모두 넣는다.
- * - 초기 데이터 버전이 올라갔을 때: 새로 추가된 레시피만 넣고, 예전 저해상도 이미지를 쓰는 레시피는 이미지만 바꾼다.
+ * - 초기 데이터 버전이 올라갔을 때: 새로 추가된 레시피만 넣고, 예전 저해상도 이미지를 쓰는 레시피는 이미지만,
+ *   없어진 카테고리(캠핑·자취)를 쓰는 레시피는 카테고리만 바꾼다.
  *   사용자가 수정하거나 삭제한 레시피는 그대로 둔다.
  */
 function ensureSeeded(): Promise<void> {
@@ -29,8 +30,12 @@ function ensureSeeded(): Promise<void> {
         if (!current) {
           if (since > appliedVersion) await repository.save(recipe)
         }
-        else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX)) {
-          await repository.save({ ...current, image: recipe.image })
+        else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX) || !isRecipeCategory(current.category)) {
+          await repository.save({
+            ...current,
+            image: current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX) ? recipe.image : current.image,
+            category: isRecipeCategory(current.category) ? current.category : recipe.category,
+          })
         }
       }
       catch {
