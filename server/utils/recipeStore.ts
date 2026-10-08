@@ -50,7 +50,7 @@ export async function findRecipe(id: string): Promise<Recipe | undefined> {
   return (await recipeStorage().getItem<Recipe>(recipeKey(id))) ?? undefined
 }
 
-export async function createRecipe(input: RecipeInput): Promise<Recipe> {
+export async function createRecipe(input: RecipeContent): Promise<Recipe> {
   await ensureSeeded()
   const now = new Date().toISOString()
   const recipe: Recipe = { ...input, id: randomUUID(), createdAt: now, updatedAt: now }
@@ -60,7 +60,7 @@ export async function createRecipe(input: RecipeInput): Promise<Recipe> {
 }
 
 /** 레시피 수정, 없는 id면 undefined */
-export async function updateRecipe(id: string, input: RecipeInput): Promise<Recipe | undefined> {
+export async function updateRecipe(id: string, input: RecipeContent): Promise<Recipe | undefined> {
   const current = await findRecipe(id)
   if (!current) return undefined
 
