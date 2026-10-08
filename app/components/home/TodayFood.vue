@@ -8,19 +8,19 @@
         </div>
         <div class="Menu">
             <div class="Menu-item">
-                <img class="Menu-Image" src="~/assets/images/TodayFood01.jpg">
+                <img class="Menu-Image" src="/images/recipes/tteokbokki.jpg">
                 <a class="explain">집에서 분식집 분위기 만들기! 어렵지 않아요!</a>
             </div>
             <div class="Menu-item">
-                <img  class="Menu-Image" src="~/assets/images/TodayFood02.jpg">
+                <img  class="Menu-Image" src="/images/recipes/jeyuk-bokkeum.jpg">
                 <a class="explain">한국인이 제일 사랑하는 음식! 제육볶음 만들기</a>
             </div>
             <div class="Menu-item">
-                <img  class="Menu-Image" src="~/assets/images/TodayFood03.jpg">
+                <img  class="Menu-Image" src="/images/recipes/smoked-duck.jpg">
                 <a class="explain">지치고 더운 여름날 몸보신하기 딱 좋은 음식! 오리고기 먹자!</a>
             </div>
             <div class="Menu-item">
-                <img  class="Menu-Image" src="~/assets/images/TodayFood04.jpg">
+                <img  class="Menu-Image" src="/images/recipes/fruit-crepe.jpg">
                 <a class="explain">남녀노소 누구나 좋아할 법한 디저트 만들기!</a>
             </div>
         </div>
