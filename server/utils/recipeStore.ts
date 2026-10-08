@@ -1,9 +1,12 @@
 import { randomUUID } from 'node:crypto'
-import { seedRecipes } from '../data/recipes'
+import { SEED_VERSION, seedRecipes } from '../data/recipes'
 
 const RECIPE_PREFIX = 'items'
+/** 마지막으로 반영한 초기 데이터 버전 (예전 버전은 true로 저장되어 있음 = 1) */
 const SEEDED_KEY = 'seeded'
 const RECIPE_ID_PATTERN = /^[\w-]{1,100}$/
+/** 예전 초기 데이터가 쓰던 저해상도 이미지 경로 */
+const LEGACY_SEED_IMAGE_PREFIX = '/images/recipes/'
 
 let seeding: Promise<void> | undefined
 
@@ -15,14 +18,35 @@ function recipeKey(id: string): string {
   return `${RECIPE_PREFIX}:${id}`
 }
 
-/** 저장소를 처음 사용할 때 한 번만 초기 데이터를 넣는다 (모두 삭제해도 다시 채우지 않음) */
+function toSeedVersion(value: unknown): number {
+  if (typeof value === 'number') return value
+  return value ? 1 : 0
+}
+
+/**
+ * 초기 데이터를 저장소에 반영한다.
+ * - 처음 사용할 때: 초기 레시피를 모두 넣는다.
+ * - 초기 데이터 버전이 올라갔을 때: 새로 추가된 레시피만 넣고, 예전 저해상도 이미지를 쓰는 레시피는 이미지만 바꾼다.
+ *   사용자가 수정하거나 삭제한 레시피는 그대로 둔다.
+ */
 function ensureSeeded(): Promise<void> {
   seeding ??= (async () => {
     const storage = recipeStorage()
-    if (await storage.hasItem(SEEDED_KEY)) return
+    const appliedVersion = toSeedVersion(await storage.getItem(SEEDED_KEY))
+    if (appliedVersion >= SEED_VERSION) return
 
-    await Promise.all(seedRecipes.map(recipe => storage.setItem(recipeKey(recipe.id), recipe)))
-    await storage.setItem(SEEDED_KEY, true)
+    for (const { recipe, since } of seedRecipes) {
+      const current = await storage.getItem<Recipe>(recipeKey(recipe.id))
+
+      if (!current) {
+        if (since > appliedVersion) await storage.setItem(recipeKey(recipe.id), recipe)
+      }
+      else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX)) {
+        await storage.setItem(recipeKey(recipe.id), { ...current, image: recipe.image })
+      }
+    }
+
+    await storage.setItem(SEEDED_KEY, SEED_VERSION)
   })().catch((error: unknown) => {
     seeding = undefined
     throw error
