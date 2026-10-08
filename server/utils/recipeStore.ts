@@ -19,17 +19,29 @@ function ensureSeeded(): Promise<void> {
     const appliedVersion = await repository.getSeedVersion()
     if (appliedVersion >= SEED_VERSION) return
 
+    // 한 레시피를 넣지 못해도(예: DB에 새 카테고리가 아직 없을 때) 목록은 계속 보여 준다.
+    // 실패한 것이 있으면 버전을 올리지 않아서 다음에 서버가 새로 뜰 때 다시 시도한다.
+    let failed = 0
     for (const { recipe, since } of seedRecipes) {
-      const current = await repository.get(recipe.id)
+      try {
+        const current = await repository.get(recipe.id)
 
-      if (!current) {
-        if (since > appliedVersion) await repository.save(recipe)
+        if (!current) {
+          if (since > appliedVersion) await repository.save(recipe)
+        }
+        else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX)) {
+          await repository.save({ ...current, image: recipe.image })
+        }
       }
-      else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX)) {
-        await repository.save({ ...current, image: recipe.image })
+      catch {
+        failed++
       }
     }
 
+    if (failed > 0) {
+      console.error(`[seed] 초기 레시피 ${failed}개를 넣지 못했습니다. supabase/schema.sql이 최신인지 확인하세요.`)
+      return
+    }
     await repository.setSeedVersion(SEED_VERSION)
   })().catch((error: unknown) => {
     seeding = undefined

@@ -13,6 +13,7 @@
 
 1. [supabase.com](https://supabase.com)에서 새 프로젝트를 만듭니다. (Region은 `Northeast Asia (Seoul)` 권장)
 2. 왼쪽 메뉴 **SQL Editor**에서 [`supabase/schema.sql`](../supabase/schema.sql) 내용을 붙여 넣고 **Run**을 누릅니다.
+   - 이 파일은 여러 번 실행해도 안전합니다. 카테고리가 추가되는 등 파일이 바뀌면 최신 내용을 다시 실행해 주세요.
    - `recipes`, `app_settings` 테이블과 공개 이미지 버킷 `recipe-images`가 만들어집니다.
 3. **Project Settings > API Keys**(또는 **API**)에서 아래 두 값을 복사해 둡니다.
    - Project URL (예: `https://abcd1234.supabase.co`)
