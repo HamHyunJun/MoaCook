@@ -51,7 +51,7 @@ pnpm typecheck # 타입 검사
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
-| GET | `/api/recipes?category=한식` | 레시피 목록 (category 선택) |
+| GET | `/api/recipes?q=떡&category=한식&difficulty=1&maxTime=30` | 레시피 목록 (검색어·카테고리·난이도·최대 조리시간 모두 선택) |
 | GET | `/api/recipes/:id` | 레시피 상세 |
 | POST | `/api/recipes` | 레시피 등록 |
 | PUT | `/api/recipes/:id` | 레시피 수정 |
