@@ -1,4 +1,6 @@
 export default defineEventHandler(async (event): Promise<Recipe> => {
+  await requireAdmin(event)
+
   const input = parseRecipeInput(await readBody(event))
   const recipe = await updateRecipe(getRouterParam(event, 'id') ?? '', input)
 

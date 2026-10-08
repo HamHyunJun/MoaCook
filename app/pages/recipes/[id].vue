@@ -1,8 +1,11 @@
 <template>
   <article v-if="recipe" class="recipe-detail">
-    <NuxtLink :to="{ path: '/', query: { category: recipe.category } }" class="back-link">
-      ← {{ recipe.category }} 레시피 목록
-    </NuxtLink>
+    <div class="top-bar">
+      <NuxtLink :to="{ path: '/', query: { category: recipe.category } }" class="back-link">
+        ← {{ recipe.category }} 레시피 목록
+      </NuxtLink>
+      <NuxtLink v-if="isAdmin" :to="`/admin/recipes/${recipe.id}/edit`" class="edit-link">수정하기</NuxtLink>
+    </div>
 
     <header class="summary">
       <div class="hero">
@@ -66,6 +69,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
+const { isAdmin } = useAdmin()
 const id = computed<string>(() => String(route.params.id))
 
 const { data: recipe, error } = await useFetch<Recipe>(() => `/api/recipes/${encodeURIComponent(id.value)}`)
@@ -99,9 +103,30 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   text-align: left;
 }
 
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.edit-link {
+  padding: 6px 14px;
+  border: 1px solid $line-color;
+  border-radius: 999px;
+  background-color: $surface-color;
+  color: $text-color;
+  font-size: $font-size-small;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    border-color: $point-color;
+  }
+}
+
 .back-link {
   display: inline-block;
-  margin-bottom: 20px;
   color: $sub-text-color;
   font-size: 0.9rem;
   text-decoration: none;

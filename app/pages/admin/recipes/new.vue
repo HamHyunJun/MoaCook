@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ middleware: 'admin' })
+
 const { createRecipe } = useRecipes()
 
 const submitting = ref(false)

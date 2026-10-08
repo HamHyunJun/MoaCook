@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ middleware: 'admin' })
+
 const route = useRoute()
 const id = computed<string>(() => String(route.params.id))
 const { updateRecipe } = useRecipes()

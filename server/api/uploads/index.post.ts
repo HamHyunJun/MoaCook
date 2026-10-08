@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto'
 
 /** 이미지 업로드 (multipart/form-data, 필드 이름: image) */
 export default defineEventHandler(async (event): Promise<ImageUploadResult> => {
+  await requireAdmin(event)
+
   const parts = await readMultipartFormData(event)
   const file = parts?.find(part => part.name === 'image' && part.filename)
 
@@ -15,12 +17,11 @@ export default defineEventHandler(async (event): Promise<ImageUploadResult> => {
   }
 
   if (file.data.length > MAX_IMAGE_SIZE) {
-    throw createError({ statusCode: 413, statusMessage: 'Payload Too Large', message: '이미지는 5MB 이하만 업로드할 수 있습니다.' })
+    throw createError({ statusCode: 413, statusMessage: 'Payload Too Large', message: '이미지는 4MB 이하만 업로드할 수 있습니다.' })
   }
 
-  const fileName = `${randomUUID()}.${extension}`
-  await uploadStorage().setItemRaw(fileName, file.data)
+  const url = await saveUploadedImage(`${randomUUID()}.${extension}`, file.data, file.type ?? 'application/octet-stream')
 
   setResponseStatus(event, 201)
-  return { url: `/uploads/${fileName}` }
+  return { url }
 })

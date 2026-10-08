@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ middleware: 'admin' })
+
 const { deleteRecipe } = useRecipes()
 
 const { data: recipes, error, refresh } = await useFetch<RecipeSummary[]>('/api/recipes')

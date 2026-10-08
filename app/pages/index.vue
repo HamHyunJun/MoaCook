@@ -1,6 +1,7 @@
 <template>
   <div class="recipe-list-page">
     <section class="intro">
+      <NuxtLink v-if="isAdmin" to="/admin/recipes/new" class="new-link">+ 레시피 등록</NuxtLink>
       <p class="eyebrow">{{ searchQuery.q ? '검색' : 'MoaCook 레시피' }}</p>
       <h1 class="title">{{ title }}</h1>
       <p v-if="!searchQuery.q" class="subtitle">집에서 따라 하기 쉬운 레시피를 모았어요.</p>
@@ -86,6 +87,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
 const MAX_TIME_OPTIONS: number[] = [15, 30, 60]
 
 const route = useRoute()
+const { isAdmin } = useAdmin()
 
 const searchQuery = computed<RecipeSearchQuery>(() => parseRecipeSearchQuery(route.query))
 
@@ -144,7 +146,25 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 }
 
 .intro {
+  position: relative;
   margin-bottom: 28px;
+}
+
+.new-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background-color: $text-color;
+  color: #fff;
+  font-size: $font-size-small;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #000;
+  }
 }
 
 .eyebrow {
