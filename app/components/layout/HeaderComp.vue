@@ -6,12 +6,19 @@
       </div>
     </div>
     <div class="menu">
-      <div class="search-form">
-        <input type="text" class="search-input" placeholder="통합검색">
-        <button class="search-button">
-          <img class="search-icon" src="~/assets/images/search.png" alt="Search Icon">
+      <form class="search-form" role="search" @submit.prevent="search">
+        <input
+          v-model="keyword"
+          type="search"
+          class="search-input"
+          placeholder="통합검색"
+          aria-label="레시피 검색"
+          maxlength="100"
+        >
+        <button type="submit" class="search-button">
+          <img class="search-icon" src="~/assets/images/search.png" alt="검색">
         </button>
-      </div>
+      </form>
       <ul class="menu-list">
         <li class="menu-item">로그인</li>
         <li class="menu-item">회원가입</li>
@@ -30,6 +37,24 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+const keyword = ref<string>('')
+
+// 검색 결과 화면에서는 현재 검색어를 입력창에 보여 준다
+watch(
+  () => route.fullPath,
+  () => {
+    const q = route.query.q
+    keyword.value = route.path === '/recipes' && typeof q === 'string' ? q : ''
+  },
+  { immediate: true },
+)
+
+function search(): void {
+  const q = keyword.value.trim()
+  navigateTo({ path: '/recipes', query: q ? { q } : {} })
+}
+
 function goHome(): void {
   navigateTo('/')
 }
