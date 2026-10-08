@@ -13,6 +13,10 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components', pathPrefix: false },
   ],
+  runtimeConfig: {
+    // 서버 전용 (클라이언트에 노출되지 않음), 환경변수 NUXT_YOUTUBE_API_KEY로 설정
+    youtubeApiKey: '',
+  },
   nitro: {
     // 레시피 데이터와 업로드 이미지는 .data 폴더에 파일로 저장 (git 제외)
     storage: {

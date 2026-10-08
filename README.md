@@ -34,6 +34,14 @@ pnpm lint      # ESLint 검사
 pnpm typecheck # 타입 검사
 ```
 
+## 환경변수
+
+`.env.example`을 복사해 `.env`를 만들고 값을 채웁니다.
+
+| 이름 | 설명 |
+|---|---|
+| `NUXT_YOUTUBE_API_KEY` | YouTube Data API v3 키. 서버에서만 사용되며, 없으면 상세 페이지에 유튜브 검색 링크만 표시됩니다. |
+
 ## 데이터 저장
 
 - 레시피와 업로드 이미지는 서버의 `.data/` 폴더에 파일로 저장됩니다. (`.data/recipes`, `.data/uploads`, git 제외)
@@ -49,3 +57,4 @@ pnpm typecheck # 타입 검사
 | PUT | `/api/recipes/:id` | 레시피 수정 |
 | DELETE | `/api/recipes/:id` | 레시피 삭제 |
 | POST | `/api/uploads` | 이미지 업로드 (multipart, 필드 `image`) |
+| GET | `/api/youtube/search?q=김치찌개` | 유튜브 참고 영상 검색 (6시간 캐시) |
