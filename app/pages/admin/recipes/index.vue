@@ -66,11 +66,10 @@ useHead({ title: '레시피 관리 | MoaCook' })
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 @use '~/assets/scss/admin';
 
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
-$line-color: #eee;
 
 .header {
   display: flex;
@@ -132,7 +131,7 @@ $line-color: #eee;
 
 .name {
   overflow: hidden;
-  color: #2c3e50;
+  color: $text-color;
   font-weight: bold;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -159,7 +158,7 @@ $line-color: #eee;
   border: 1px solid $line-color;
   border-radius: 8px;
   background-color: #fff;
-  color: #2c3e50;
+  color: $text-color;
   font: inherit;
   font-size: 0.9rem;
   text-decoration: none;
@@ -168,11 +167,11 @@ $line-color: #eee;
 
 .action-danger {
   border-color: #f5c2bd;
-  color: #d93025;
+  color: $error-color;
 }
 
 .delete-error {
   margin-top: 16px;
-  color: #d93025;
+  color: $error-color;
 }
 </style>

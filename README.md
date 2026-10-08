@@ -15,11 +15,14 @@
 app/
 ├── app.vue              # 루트 컴포넌트
 ├── layouts/default.vue  # 공통 레이아웃 (헤더)
-├── pages/               # 파일 기반 라우팅
+├── pages/               # 파일 기반 라우팅 (홈 = 레시피 목록, recipes/[id] = 상세, admin = 관리)
 ├── components/
 │   ├── layout/          # 헤더 등 레이아웃 컴포넌트
-│   └── home/            # 메인 화면 섹션 컴포넌트
-└── assets/images/       # 이미지 에셋
+│   ├── recipe/          # 레시피 카드, 등록 폼, 참고 영상
+│   └── common/          # 확인 창 등 공통 컴포넌트
+└── assets/
+    ├── images/          # 로고 이미지
+    └── scss/            # 공통 SCSS 변수 (_variables.scss)
 public/                  # 정적 파일 (favicon 등)
 ```
 

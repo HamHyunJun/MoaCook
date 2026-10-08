@@ -44,6 +44,8 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 .confirm-dialog {
   width: min(90vw, 360px);
   padding: 24px;
@@ -87,11 +89,11 @@ watch(
 .button-outline {
   border-color: #e5e5e5;
   background-color: #fff;
-  color: #2c3e50;
+  color: $text-color;
 }
 
 .button-danger {
-  background-color: #d93025;
+  background-color: $error-color;
   color: #fff;
 }
 </style>

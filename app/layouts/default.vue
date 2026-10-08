@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div>
-      <HeaderComp />
-    </div>
-    <slot />
+    <HeaderComp />
+    <main>
+      <slot />
+    </main>
   </div>
 </template>
 

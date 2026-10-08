@@ -1,39 +1,27 @@
 <template>
-  <div class="header">
-    <div class="logo">
-      <div class="logo-image">
-        <img src="~/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="goHome">
-      </div>
-    </div>
-    <div class="menu">
+  <header class="header">
+    <div class="header-inner">
+      <NuxtLink to="/" class="logo" aria-label="MoaCook 홈">
+        <img src="~/assets/images/MoaCook2.png" alt="MoaCook" class="logo-image">
+      </NuxtLink>
+
       <form class="search-form" role="search" @submit.prevent="search">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
         <input
           v-model="keyword"
           type="search"
           class="search-input"
-          placeholder="통합검색"
+          placeholder="레시피, 재료 검색"
           aria-label="레시피 검색"
           maxlength="100"
         >
-        <button type="submit" class="search-button">
-          <img class="search-icon" src="~/assets/images/search.png" alt="검색">
-        </button>
+        <button type="submit" class="search-button">검색</button>
       </form>
-      <ul class="menu-list">
-        <li class="menu-item">로그인</li>
-        <li class="menu-item">회원가입</li>
-      </ul>
     </div>
-    <nav class="nav">
-      <ul class="nav-list">
-        <li v-for="category in RECIPE_CATEGORIES" :key="category">
-          <button @click="goCategory(category)">{{ category }} 조리법</button>
-        </li>
-      </ul>
-    </nav>
-    <hr>
-  </div>
-  <hr class="divider">
+  </header>
 </template>
 
 <script setup lang="ts">
@@ -45,188 +33,135 @@ watch(
   () => route.fullPath,
   () => {
     const q = route.query.q
-    keyword.value = route.path === '/recipes' && typeof q === 'string' ? q : ''
+    keyword.value = route.path === '/' && typeof q === 'string' ? q : ''
   },
   { immediate: true },
 )
 
 function search(): void {
   const q = keyword.value.trim()
-  navigateTo({ path: '/recipes', query: q ? { q } : {} })
-}
-
-function goHome(): void {
-  navigateTo('/')
-}
-
-function goCategory(category: RecipeCategory): void {
-  navigateTo({ path: '/recipes', query: { category } })
+  navigateTo({ path: '/', query: q ? { q } : {} })
 }
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid $line-color;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
+}
+
+.header-inner {
   display: flex;
-  height: 16vh;
   justify-content: space-between;
   align-items: center;
-  padding: 1vh 1vw 0;
+  gap: 24px;
+  max-width: $content-max-width;
+  height: 72px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo {
-  width: 30vw;
-  margin-left: -5vw;
+  flex-shrink: 0;
+  display: block;
 }
+
 .logo-image {
-  width: 14vw;
-  left: 16vw;
-  margin-top: 3vh;
-  padding-bottom: 40%;
-  position: relative;
-  overflow: hidden;
-}
-
-.logo img {
-  position: absolute;
-  top: -1vh;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.menu {
-  position: absolute;
-  left: 40vw;
-  width: 80vw;
-}
-
-.menu-list {
-  position: absolute;
-  list-style: none;
-  display: flex;
-  right: 40vw;
-  top: -7vh;
-}
-
-.menu-item {
-  font-size: 0.9vw; 
-  font-weight: 500;
-  color: #7F879E;
-  margin-right: 2vw; 
+  display: block;
+  width: 96px;
+  height: auto;
 }
 
 .search-form {
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
-  top: -7vh;
-  left: -3vw; 
   width: 100%;
+  max-width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: $sub-text-color;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
 }
 
 .search-input {
-  width: 30%;
-  max-width: 28vw; 
-  height: 4vh; 
-  padding-left: 1vw; 
-  border: 0.1vw solid #7F879E; 
-  border-radius: 2vw; 
+  width: 100%;
+  height: 44px;
+  padding: 0 72px 0 44px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   outline: none;
-  font-size: 0.8vw; 
+  background-color: #F2F3F5;
+  color: $text-color;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &::placeholder {
+    color: $sub-text-color;
+  }
+
+  &:focus {
+    border-color: $point-color;
+    background-color: $surface-color;
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
 }
 
 .search-button {
   position: absolute;
-  width: 1.9vw; 
-  height: 1.9vw; 
-  left: 22.7vw; 
-  border: 0.1vw solid #FFBD59; 
-  border-radius: 2vw; 
-  background-color: #FFBD59;
-  cursor: pointer;
-  outline: none;
-}
-
-.search-icon {
-  width: 90%; 
-  height: auto; 
-}
-
-.nav-list {
-  position: absolute;
-  list-style: none;
-  display: flex;
-  margin-top: 2vh; 
-  margin-right: 2vw;
-}
-
-.nav-list button{
-  background-color: white;
+  right: 5px;
+  height: 34px;
+  padding: 0 16px;
   border: none;
-  font-size: 1.1vw;
-  font-weight: bold;
-  margin-left: 3vw;
-}
-
-.nav-list button:hover{
-  color: #FFBD59;
+  border-radius: 999px;
+  background-color: $point-color;
+  color: $text-color;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
+
+  &:hover {
+    background-color: $point-strong-color;
+  }
 }
 
-.nav-list a{
-  text-decoration: none;
-  color: black;
-}
-
-.nav-list a:hover{
-  color: #FFBD59;
-  cursor: pointer;
-}
-
-.divider {
-  height: 0.2vh; 
-  background-color: #FFBD59;
-  border: 0;
-  margin-top: 0.2vh; 
-}
-
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 5vh 5vw 0;
+@media (max-width: $mobile-max-width) {
+  .header-inner {
+    gap: 12px;
+    height: 64px;
+    padding: 0 16px;
   }
 
-  .menu-list {
-    margin-top: 2vh;
-  }
-
-  .search-form {
-    margin-top: 2vh;
-    width: 100%;
+  .logo-image {
+    width: 72px;
   }
 
   .search-input {
-    font-size: 4vw; 
+    height: 40px;
+    font-size: 0.9rem;
   }
 
   .search-button {
-    margin-left: 0;
-    margin-top: 2vh;
-  }
-
-  .nav-list {
-    margin-top: 4vh;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav-list li {
-    margin-right: 0;
-    margin-bottom: 2vh;
+    height: 30px;
+    padding: 0 12px;
   }
 }
 </style>

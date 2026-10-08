@@ -7,7 +7,7 @@
       </a>
     </div>
 
-    <p v-if="pending" class="message">참고 영상을 불러오는 중입니다…</p>
+    <p v-if="loading" class="message">참고 영상을 불러오는 중입니다…</p>
     <ul v-else-if="videos.length" class="video-grid">
       <li v-for="video in videos" :key="video.id">
         <a :href="video.url" target="_blank" rel="noopener noreferrer" class="video-card">
@@ -34,12 +34,14 @@ const props = defineProps<{
 const q = computed<string>(() => props.query)
 
 // 영상 목록은 상세 내용을 먼저 보여 준 뒤 브라우저에서 불러온다
-const { data, pending } = useFetch<YoutubeSearchResult>('/api/youtube/search', {
+const { data, status } = useFetch<YoutubeSearchResult>('/api/youtube/search', {
   query: { q },
   server: false,
   lazy: true,
 })
 
+// 서버 렌더링 시점(idle)도 불러오는 중으로 보여야 화면 복원(hydration) 결과가 서버와 같다
+const loading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending')
 const videos = computed<YoutubeVideo[]>(() => data.value?.videos ?? [])
 const searchUrl = computed<string>(() =>
   data.value?.searchUrl ?? `https://www.youtube.com/results?search_query=${encodeURIComponent(props.query)}`,
@@ -53,8 +55,7 @@ function formatViewCount(count: number): string {
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
+@use '~/assets/scss/variables' as *;
 
 .header {
   display: flex;
@@ -67,9 +68,9 @@ $sub-text-color: #7F879E;
 
 .section-title {
   margin: 0;
-  padding-left: 10px;
-  border-left: 4px solid $point-color;
-  font-size: 1.35rem;
+  font-size: $font-size-h2;
+  font-weight: 800;
+  letter-spacing: $tracking-snug;
 }
 
 .search-link {
@@ -86,8 +87,9 @@ $sub-text-color: #7F879E;
 .message {
   margin: 0;
   padding: 20px;
-  border-radius: 12px;
-  background-color: #f8f8f8;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
   color: $sub-text-color;
   text-align: center;
 }
@@ -103,18 +105,18 @@ $sub-text-color: #7F879E;
 
 .video-card {
   display: block;
-  color: #2c3e50;
+  color: $text-color;
   text-decoration: none;
 
   &:hover .title {
-    color: $point-color;
+    color: $point-strong-color;
   }
 }
 
 .thumbnail-wrap {
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #f0f0f0;
+  border-radius: $radius-md;
+  background-color: $line-color;
   aspect-ratio: 16 / 9;
 }
 

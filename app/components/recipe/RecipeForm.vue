@@ -287,10 +287,7 @@ function onSubmit(): void {
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
-$line-color: #e5e5e5;
-$error-color: #d93025;
+@use '~/assets/scss/variables' as *;
 
 .recipe-form {
   display: flex;
@@ -471,7 +468,7 @@ textarea {
 .button-outline {
   border-color: $line-color;
   background-color: #fff;
-  color: #2c3e50;
+  color: $text-color;
 }
 
 .add-button {

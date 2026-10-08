@@ -7,7 +7,11 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'ko' },
       title: 'MoaCook',
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        // 본문 글꼴 Pretendard (public/fonts, 화면에 쓰인 글자 묶음만 내려받는 방식)
+        { rel: 'stylesheet', href: '/fonts/pretendard/pretendardvariable-dynamic-subset.css' },
+      ],
     },
   },
   components: [
@@ -25,7 +29,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // 기존 한식 페이지 주소는 레시피 목록(한식)으로 이동
-    '/menu/koreafood': { redirect: '/recipes?category=' + encodeURIComponent('한식') },
+    // 기존 한식 페이지 주소는 홈 레시피 목록(한식)으로 이동
+    '/menu/koreafood': { redirect: '/?category=' + encodeURIComponent('한식') },
   },
 })
