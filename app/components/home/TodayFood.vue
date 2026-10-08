@@ -7,27 +7,25 @@
             </h2>
         </div>
         <div class="Menu">
-            <div class="Menu-item">
-                <img class="Menu-Image" src="/images/recipes/tteokbokki.jpg">
-                <a class="explain">집에서 분식집 분위기 만들기! 어렵지 않아요!</a>
-            </div>
-            <div class="Menu-item">
-                <img  class="Menu-Image" src="/images/recipes/jeyuk-bokkeum.jpg">
-                <a class="explain">한국인이 제일 사랑하는 음식! 제육볶음 만들기</a>
-            </div>
-            <div class="Menu-item">
-                <img  class="Menu-Image" src="/images/recipes/smoked-duck.jpg">
-                <a class="explain">지치고 더운 여름날 몸보신하기 딱 좋은 음식! 오리고기 먹자!</a>
-            </div>
-            <div class="Menu-item">
-                <img  class="Menu-Image" src="/images/recipes/fruit-crepe.jpg">
-                <a class="explain">남녀노소 누구나 좋아할 법한 디저트 만들기!</a>
-            </div>
+            <NuxtLink
+                v-for="recipe in recommendedRecipes"
+                :key="recipe.id"
+                :to="`/recipes/${recipe.id}`"
+                class="Menu-item"
+            >
+                <img class="Menu-Image" :src="recipe.image" :alt="recipe.name">
+                <span class="explain">{{ recipe.description }}</span>
+            </NuxtLink>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+const RECOMMENDED_COUNT = 4
+
+const { data: recipes } = await useFetch<RecipeSummary[]>('/api/recipes')
+
+const recommendedRecipes = computed<RecipeSummary[]>(() => (recipes.value ?? []).slice(0, RECOMMENDED_COUNT))
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +50,8 @@
 }
 .Menu-item {
     display: inline-block;
+    color: inherit;
+    text-decoration: none;
     align-items: center;
     margin: 0 1vw; 
 }

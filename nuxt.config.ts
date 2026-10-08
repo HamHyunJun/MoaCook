@@ -13,4 +13,8 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components', pathPrefix: false },
   ],
+  routeRules: {
+    // 기존 한식 페이지 주소는 레시피 목록(한식)으로 이동
+    '/menu/koreafood': { redirect: '/recipes?category=' + encodeURIComponent('한식') },
+  },
 })
