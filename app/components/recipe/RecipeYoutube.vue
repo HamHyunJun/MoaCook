@@ -53,8 +53,7 @@ function formatViewCount(count: number): string {
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
+@use '~/assets/scss/variables' as *;
 
 .header {
   display: flex;
@@ -103,7 +102,7 @@ $sub-text-color: #7F879E;
 
 .video-card {
   display: block;
-  color: #2c3e50;
+  color: $text-color;
   text-decoration: none;
 
   &:hover .title {

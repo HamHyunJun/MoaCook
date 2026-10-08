@@ -30,8 +30,7 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
+@use '~/assets/scss/variables' as *;
 
 .recipe-card {
   display: flex;
@@ -41,7 +40,7 @@ $sub-text-color: #7F879E;
   border: 1px solid #eee;
   border-radius: 12px;
   background-color: #fff;
-  color: #2c3e50;
+  color: $text-color;
   text-align: left;
   text-decoration: none;
   transition: box-shadow 0.2s ease, transform 0.2s ease;

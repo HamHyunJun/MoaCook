@@ -90,9 +90,7 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
-$line-color: #eee;
+@use '~/assets/scss/variables' as *;
 
 .recipe-detail {
   max-width: 960px;

@@ -140,8 +140,7 @@ useHead({ title: () => `${title.value} | MoaCook` })
 </script>
 
 <style lang="scss" scoped>
-$point-color: #FFBD59;
-$sub-text-color: #7F879E;
+@use '~/assets/scss/variables' as *;
 
 .recipe-list-page {
   max-width: 1100px;
@@ -176,7 +175,7 @@ $sub-text-color: #7F879E;
   border: 1px solid #ddd;
   border-radius: 999px;
   background-color: #fff;
-  color: #2c3e50;
+  color: $text-color;
   font-size: 0.9rem;
   cursor: pointer;
 

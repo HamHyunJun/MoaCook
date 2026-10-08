@@ -65,6 +65,8 @@ function goCategory(category: RecipeCategory): void {
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 .header {
   display: flex;
   height: 16vh;
@@ -112,7 +114,7 @@ function goCategory(category: RecipeCategory): void {
 .menu-item {
   font-size: 0.9vw; 
   font-weight: 500;
-  color: #7F879E;
+  color: $sub-text-color;
   margin-right: 2vw; 
 }
 
@@ -130,7 +132,7 @@ function goCategory(category: RecipeCategory): void {
   max-width: 28vw; 
   height: 4vh; 
   padding-left: 1vw; 
-  border: 0.1vw solid #7F879E; 
+  border: 0.1vw solid $sub-text-color; 
   border-radius: 2vw; 
   outline: none;
   font-size: 0.8vw; 
@@ -141,9 +143,9 @@ function goCategory(category: RecipeCategory): void {
   width: 1.9vw; 
   height: 1.9vw; 
   left: 22.7vw; 
-  border: 0.1vw solid #FFBD59; 
+  border: 0.1vw solid $point-color; 
   border-radius: 2vw; 
-  background-color: #FFBD59;
+  background-color: $point-color;
   cursor: pointer;
   outline: none;
 }
@@ -170,7 +172,7 @@ function goCategory(category: RecipeCategory): void {
 }
 
 .nav-list button:hover{
-  color: #FFBD59;
+  color: $point-color;
   cursor: pointer;
 }
 
@@ -180,13 +182,13 @@ function goCategory(category: RecipeCategory): void {
 }
 
 .nav-list a:hover{
-  color: #FFBD59;
+  color: $point-color;
   cursor: pointer;
 }
 
 .divider {
   height: 0.2vh; 
-  background-color: #FFBD59;
+  background-color: $point-color;
   border: 0;
   margin-top: 0.2vh; 
 }
