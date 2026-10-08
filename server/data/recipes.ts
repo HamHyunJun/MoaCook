@@ -13,7 +13,10 @@ interface RecipeSeed extends Omit<Recipe, 'ingredients' | 'steps' | 'createdAt' 
 
 const SEEDED_AT = '2026-10-08T00:00:00.000Z'
 
-function toRecipe(seed: RecipeSeed): Recipe {
+function toRecipe(seed: RecipeSeed, index: number): Recipe {
+  // 목록이 등록 순서(createdAt 오름차순)로 정렬되므로 초기 데이터 순서를 유지하도록 1초씩 차이를 둔다
+  const seededAt = new Date(Date.parse(SEEDED_AT) + index * 1000).toISOString()
+
   return {
     ...seed,
     ingredients: seed.ingredients.map(([name, amount], index) => ({
@@ -26,8 +29,8 @@ function toRecipe(seed: RecipeSeed): Recipe {
       order: index + 1,
       description,
     })),
-    createdAt: SEEDED_AT,
-    updatedAt: SEEDED_AT,
+    createdAt: seededAt,
+    updatedAt: seededAt,
   }
 }
 
