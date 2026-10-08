@@ -3,7 +3,7 @@
     <div class="slider-container">
       <div class="slider">
         <div class="slides" :style="{ transform: 'translateX(' + slideOffset + 'vw)' }">
-          <div class="slide" v-for="(img, index) in images" :key="index">
+          <div v-for="(img, index) in images" :key="index" class="slide">
             <img :src="img" class="slide-img">
           </div>
         </div>
@@ -15,39 +15,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ImageSlider',
-  data() {
-    return {
-      images: [
-        require('@/assets/images/slide01.jpg'),
-        require('@/assets/images/slide02.jpg'),
-        require('@/assets/images/slide03.jpg'),
-      ],
-      slideIndex: 0,
-      slideWidth: 45, // 이미지 너비 (vw 단위)
-      sideImageWidth: 20, // 사이드 이미지 너비 (vw 단위)
-      sideImage: require('@/assets/images/side1.jpg'),
-    };
-  },
-  computed: {
-    slideOffset() {
-      return -this.slideIndex * this.slideWidth;
-    },
-  },
-  mounted() {
-    setInterval(this.nextSlide, 3000); // 3초마다 슬라이드 변경
-  },
-  methods: {
-    nextSlide() {
-      this.slideIndex = (this.slideIndex + 1) % this.images.length;
-    },
-  },
-};
+<script setup lang="ts">
+import slide01 from '~/assets/images/slide01.jpg'
+import slide02 from '~/assets/images/slide02.jpg'
+import slide03 from '~/assets/images/slide03.jpg'
+import side1 from '~/assets/images/side1.jpg'
+
+const images: string[] = [slide01, slide02, slide03]
+const slideIndex = ref(0)
+const slideWidth = 45 // 이미지 너비 (vw 단위)
+const sideImage = side1
+
+const slideOffset = computed<number>(() => -slideIndex.value * slideWidth)
+
+let timer: ReturnType<typeof setInterval> | undefined
+
+function nextSlide(): void {
+  slideIndex.value = (slideIndex.value + 1) % images.length
+}
+
+onMounted(() => {
+  timer = setInterval(nextSlide, 3000) // 3초마다 슬라이드 변경
+})
+
+onBeforeUnmount(() => {
+  clearInterval(timer)
+})
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .slider-wrapper {
   position: absolute;
   display: flex;

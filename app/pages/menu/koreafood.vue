@@ -1,17 +1,13 @@
 <template>
-    hi
     <div class="KoreaFood">
         hihi
     </div>
 </template>
 
-<script>
-export default {
-    
-}
+<script setup lang="ts">
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .KoreaFood{
         width: 100%;
         height: 100%;
