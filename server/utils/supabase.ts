@@ -11,7 +11,7 @@ export interface SupabaseConfig {
 }
 
 /** NUXT_SUPABASE_URL과 NUXT_SUPABASE_SERVICE_ROLE_KEY가 모두 있으면 Supabase를 쓴다 */
-export function getSupabaseConfig(): SupabaseConfig | undefined {
+export const getSupabaseConfig = (): SupabaseConfig | undefined => {
   const { supabaseUrl, supabaseServiceRoleKey, supabaseBucket } = useRuntimeConfig()
   if (!supabaseUrl || !supabaseServiceRoleKey) return undefined
 
@@ -26,7 +26,7 @@ export function getSupabaseConfig(): SupabaseConfig | undefined {
  * 새 형식의 secret 키(sb_secret_...)는 apikey 헤더로만 보내고,
  * 예전 형식의 service_role 키(JWT)는 Authorization 헤더에도 함께 보낸다.
  */
-export function supabaseHeaders(config: SupabaseConfig): Record<string, string> {
+export const supabaseHeaders = (config: SupabaseConfig): Record<string, string> => {
   if (config.serviceRoleKey.startsWith('sb_')) {
     return { apikey: config.serviceRoleKey }
   }
@@ -37,7 +37,7 @@ export function supabaseHeaders(config: SupabaseConfig): Record<string, string> 
 }
 
 /** 실패 원인은 서버 로그에만 남기고 사용자에게는 일반 메시지를 보여 준다 */
-export function toSupabaseError(error: unknown, action: string): never {
+export const toSupabaseError = (error: unknown, action: string): never => {
   const status = (error as { statusCode?: number } | undefined)?.statusCode
   const detail = (error as { data?: unknown } | undefined)?.data
   console.error(`[supabase] ${action} 실패`, status ?? '', detail ?? '')

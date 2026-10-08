@@ -45,7 +45,7 @@ const deleteTarget = ref<RecipeSummary | null>(null)
 const deleting = ref(false)
 const deleteError = ref('')
 
-async function onConfirmDelete(): Promise<void> {
+const onConfirmDelete = async (): Promise<void> => {
   const target = deleteTarget.value
   if (!target) return
 

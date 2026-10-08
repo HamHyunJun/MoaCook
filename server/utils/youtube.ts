@@ -32,15 +32,15 @@ const HTML_ENTITIES: Readonly<Record<string, string>> = {
 }
 
 /** 검색 API 제목에 들어 있는 HTML 엔티티를 문자로 되돌린다 */
-function decodeHtmlEntities(text: string): string {
+const decodeHtmlEntities = (text: string): string => {
   return text.replace(/&(amp|lt|gt|quot|#39);/g, entity => HTML_ENTITIES[entity] ?? entity)
 }
 
-export function youtubeSearchUrl(query: string): string {
+export const youtubeSearchUrl = (query: string): string => {
   return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
 }
 
-async function fetchYoutubeVideos(query: string, apiKey: string): Promise<YoutubeVideo[]> {
+const fetchYoutubeVideos = async (query: string, apiKey: string): Promise<YoutubeVideo[]> => {
   // 1) 관련도 순 검색 (100 유닛)
   // 키는 URL(로그에 남을 수 있음) 대신 헤더로 전달
   const headers = { 'X-Goog-Api-Key': apiKey }

@@ -24,11 +24,11 @@ export interface SeedRecipe {
 const SEEDED_AT = '2026-10-08T00:00:00.000Z'
 
 /** Unsplash 사진을 고화질(가로 1600px)로 불러오는 주소 */
-function unsplash(photoId: string): string {
+const unsplash = (photoId: string): string => {
   return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=1600&q=80`
 }
 
-function toSeedRecipe({ since = 1, ...seed }: RecipeSeed, index: number): SeedRecipe {
+const toSeedRecipe = ({ since = 1, ...seed }: RecipeSeed, index: number): SeedRecipe => {
   // 목록이 등록 순서(createdAt 오름차순)로 정렬되므로 초기 데이터 순서를 유지하도록 1초씩 차이를 둔다
   const seededAt = new Date(Date.parse(SEEDED_AT) + index * 1000).toISOString()
 

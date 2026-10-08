@@ -15,7 +15,7 @@ export const MAX_IMAGE_SIZE = 4 * 1024 * 1024
 
 export const UPLOAD_FILE_NAME_PATTERN = /^[0-9a-f-]{36}\.(jpg|png|webp|gif)$/
 
-export function uploadStorage() {
+export const uploadStorage = () => {
   return useStorage('uploads')
 }
 
@@ -23,7 +23,7 @@ export function uploadStorage() {
  * 업로드한 이미지를 저장하고 화면에서 쓸 주소를 돌려준다.
  * Supabase 설정이 있으면 Storage 버킷(공개)에, 없으면 서버의 .data/uploads 폴더에 저장한다.
  */
-export async function saveUploadedImage(fileName: string, data: Buffer, contentType: string): Promise<string> {
+export const saveUploadedImage = async (fileName: string, data: Buffer, contentType: string): Promise<string> => {
   const config = getSupabaseConfig()
 
   if (!config) {

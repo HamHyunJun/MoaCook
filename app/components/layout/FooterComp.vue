@@ -20,7 +20,7 @@
 const { isAdmin, logout } = useAdmin()
 const year = new Date().getFullYear()
 
-async function onLogout(): Promise<void> {
+const onLogout = async (): Promise<void> => {
   await logout()
   await navigateTo('/')
 }
