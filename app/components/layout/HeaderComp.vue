@@ -19,20 +19,8 @@
     </div>
     <nav class="nav">
       <ul class="nav-list">
-        <li>
-          <button @click="goKoreaFood">한식 조리법</button>
-        </li>
-        <li>
-          <button>중식 조리법</button>
-        </li>
-        <li>
-          <button>일식 조리법</button>
-        </li>
-        <li>
-          <button>양식 조리법</button>
-        </li>
-        <li>
-          <button>비건 조리법</button>
+        <li v-for="category in RECIPE_CATEGORIES" :key="category">
+          <button @click="goCategory(category)">{{ category }} 조리법</button>
         </li>
       </ul>
     </nav>
@@ -46,8 +34,8 @@ function goHome(): void {
   navigateTo('/')
 }
 
-function goKoreaFood(): void {
-  navigateTo('/menu/koreafood')
+function goCategory(category: RecipeCategory): void {
+  navigateTo({ path: '/recipes', query: { category } })
 }
 </script>
 
