@@ -5,6 +5,8 @@
       <slot />
     </main>
     <FooterComp />
+    <!-- 앱에서 하단 네비게이션바 뒤로 내용이 비쳐 겹쳐 보이지 않도록 그 영역을 흰색으로 가린다 -->
+    <div class="safe-area-bottom" aria-hidden="true" />
   </div>
 </template>
 
@@ -23,5 +25,16 @@ await callOnce('admin-status', ensureStatus)
 
 .main {
   flex: 1;
+}
+
+.safe-area-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+  height: var(--safe-bottom);
+  background-color: #fff;
+  pointer-events: none;
 }
 </style>

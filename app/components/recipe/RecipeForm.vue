@@ -583,6 +583,10 @@ textarea {
     padding: 20px 16px;
   }
 
+  .image-preview {
+    width: 100%;
+  }
+
   .actions .button {
     flex: 1;
   }

@@ -33,7 +33,7 @@ async function onLogout(): Promise<void> {
   margin-top: 40px;
   border-top: 1px solid $line-color;
   background-color: #FAFAFB;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--safe-bottom);
 }
 
 .footer-inner {

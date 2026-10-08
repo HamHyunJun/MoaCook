@@ -52,7 +52,7 @@ function search(): void {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding-top: env(safe-area-inset-top);
+  padding-top: var(--safe-top);
   border-bottom: 1px solid $line-color;
   background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: saturate(180%) blur(12px);
@@ -69,7 +69,9 @@ function search(): void {
 }
 
 .logo {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
   font-size: 1.375rem;
   text-decoration: none;
 
