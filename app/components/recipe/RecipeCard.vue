@@ -26,11 +26,7 @@ const props = defineProps<{
   recipe: RecipeSummary
 }>()
 
-const MAX_DIFFICULTY = 3
-
-const difficultyStars = computed<string>(() =>
-  '★'.repeat(props.recipe.difficulty) + '☆'.repeat(MAX_DIFFICULTY - props.recipe.difficulty),
-)
+const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.difficulty))
 </script>
 
 <style lang="scss" scoped>
