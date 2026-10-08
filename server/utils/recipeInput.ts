@@ -20,10 +20,10 @@ function isRecipeDifficulty(value: unknown): value is RecipeDifficulty {
 }
 
 /**
- * 등록/수정 요청 본문을 검증해 RecipeInput으로 변환한다.
+ * 등록/수정 요청 본문(RecipeInput)을 검증해 RecipeContent로 변환한다.
  * 잘못된 항목이 있으면 모든 오류 메시지를 담아 400 오류를 던진다.
  */
-export function parseRecipeInput(body: unknown): RecipeInput {
+export function parseRecipeInput(body: unknown): RecipeContent {
   const errors: string[] = []
 
   if (!isObject(body)) {

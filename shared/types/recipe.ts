@@ -46,8 +46,20 @@ export type RecipeSummary = Pick<
   'id' | 'name' | 'image' | 'description' | 'category' | 'difficulty' | 'cookingTime'
 >
 
-/** 레시피 등록/수정 요청 본문 (id, 생성/수정 시각은 서버에서 지정) */
-export type RecipeInput = Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>
+/** 서버에서 검증을 마친 레시피 내용 (id, 생성/수정 시각 제외) */
+export type RecipeContent = Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>
+
+/** 등록/수정 요청의 재료 (새 재료는 id 없이 보내면 서버에서 생성) */
+export type RecipeIngredientInput = Omit<RecipeIngredient, 'id'> & { id?: string }
+
+/** 등록/수정 요청의 조리 과정 (순서는 배열 순서로 서버에서 매김) */
+export type RecipeStepInput = Omit<RecipeStep, 'id' | 'order'> & { id?: string }
+
+/** 레시피 등록/수정 요청 본문 */
+export interface RecipeInput extends Omit<RecipeContent, 'ingredients' | 'steps'> {
+  ingredients: RecipeIngredientInput[]
+  steps: RecipeStepInput[]
+}
 
 /** 목록 검색/필터 조건 (모두 선택값) */
 export interface RecipeSearchQuery {
