@@ -82,8 +82,8 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
   border-radius: 999px;
   background-color: rgba(255, 255, 255, 0.9);
   color: $text-color;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   backdrop-filter: blur(6px);
 }
 
@@ -97,9 +97,10 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
 
 .name {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: $font-size-h3;
+  font-weight: 750;
+  letter-spacing: $tracking-snug;
+  line-height: 1.35;
 }
 
 .description {
@@ -108,8 +109,8 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
   margin: 0;
   overflow: hidden;
   color: $sub-text-color;
-  font-size: 0.9rem;
-  line-height: 1.55;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   word-break: keep-all;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -121,7 +122,7 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
   margin: 8px 0 0;
   padding-top: 12px;
   border-top: 1px solid $line-color;
-  font-size: 0.85rem;
+  font-size: $font-size-caption;
 }
 
 .meta-item {

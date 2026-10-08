@@ -68,9 +68,9 @@ function formatViewCount(count: number): string {
 
 .section-title {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: $font-size-h2;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: $tracking-snug;
 }
 
 .search-link {

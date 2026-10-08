@@ -107,7 +107,8 @@ function search(): void {
   outline: none;
   background-color: #F2F3F5;
   color: $text-color;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 
   &::placeholder {

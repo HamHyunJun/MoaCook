@@ -143,24 +143,24 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   border-radius: 999px;
   background-color: $point-soft-color;
   color: $point-strong-color;
-  font-size: 0.8rem;
+  font-size: $font-size-caption;
   font-weight: 700;
 }
 
 .name {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.25;
+  font-size: $font-size-h1;
+  font-weight: 820;
+  letter-spacing: $tracking-tight;
+  line-height: 1.2;
 }
 
 .description {
   margin: 0;
   color: $sub-text-color;
-  font-size: 1rem;
-  line-height: 1.6;
-  word-break: keep-all;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.65;
 }
 
 .meta {
@@ -178,13 +178,15 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   dt {
     margin-bottom: 4px;
     color: $sub-text-color;
-    font-size: 0.8rem;
+    font-size: $font-size-caption;
+    font-weight: 500;
   }
 
   dd {
     margin: 0;
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1.125rem;
+    font-weight: 750;
+    letter-spacing: $tracking-snug;
   }
 
   & + & {
@@ -203,9 +205,9 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 
 .section-title {
   margin: 0 0 16px;
-  font-size: 1.3rem;
+  font-size: $font-size-h2;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: $tracking-snug;
 }
 
 .ingredients {
@@ -225,7 +227,8 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   gap: 12px;
   padding: 14px 0;
   border-bottom: 1px solid $line-color;
-  font-size: 1rem;
+  font-size: $font-size-body;
+  font-weight: 500;
 
   &:last-child {
     border-bottom: none;
@@ -265,8 +268,9 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   border-radius: 50%;
   background-color: $point-soft-color;
   color: $point-strong-color;
-  font-size: 0.9rem;
+  font-size: $font-size-small;
   font-weight: 800;
+  letter-spacing: 0;
 }
 
 .step-body {
@@ -277,9 +281,8 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 
 .step-description {
   margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  word-break: keep-all;
+  font-size: 1.0625rem;
+  line-height: 1.75;
 }
 
 .step-image {
@@ -302,7 +305,7 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   }
 
   .name {
-    font-size: 2.4rem;
+    font-size: $font-size-display;
   }
 
   .ingredients {

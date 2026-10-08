@@ -158,25 +158,31 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: $point-soft-color;
   color: $point-strong-color;
-  font-size: 0.85rem;
+  font-size: $font-size-caption;
   font-weight: 700;
+  letter-spacing: 0;
 }
 
 .title {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.3;
+  font-size: $font-size-display;
+  font-weight: 820;
+  letter-spacing: $tracking-tight;
+  line-height: 1.2;
   word-break: break-all;
 }
 
 .subtitle {
-  margin: 8px 0 0;
+  margin: 12px 0 0;
   color: $sub-text-color;
-  font-size: 1rem;
+  font-size: 1.0625rem;
+  font-weight: 500;
 }
 
 .filters {
@@ -203,8 +209,8 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   border-radius: 999px;
   background-color: $surface-color;
   color: $text-color;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: $font-size-small;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 
@@ -216,7 +222,6 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
     border-color: $text-color;
     background-color: $text-color;
     color: #fff;
-    font-weight: 600;
   }
 }
 
@@ -231,7 +236,8 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   border-radius: 999px;
   background: $surface-color url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237F879E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
   color: $text-color;
-  font-size: 0.9rem;
+  font-size: $font-size-small;
+  font-weight: 600;
   cursor: pointer;
   appearance: none;
 
@@ -301,11 +307,17 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.875rem;
   }
 
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  // 줄바꿈을 끄지 않으면 세로 배치에서 칩 줄 길이만큼 너비가 늘어난다
   .filters {
     flex-direction: column;
+    flex-wrap: nowrap;
     align-items: stretch;
   }
 
