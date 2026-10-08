@@ -9,11 +9,8 @@ export default defineNuxtConfig({
       title: 'MoaCook',
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        // 본문 글꼴 (Pretendard, 사용하는 글자만 나눠 받는 웹폰트)
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css',
-        },
+        // 본문 글꼴 Pretendard (public/fonts, 화면에 쓰인 글자 묶음만 내려받는 방식)
+        { rel: 'stylesheet', href: '/fonts/pretendard/pretendardvariable-dynamic-subset.css' },
       ],
     },
   },
