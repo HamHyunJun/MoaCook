@@ -2,7 +2,7 @@
   <div class="header">
     <div class="logo">
       <div class="logo-image">
-        <img src="@/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="test()">
+        <img src="@/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="goHome()">
       </div>
     </div>
     <div class="menu">
@@ -44,11 +44,9 @@
 <script>
 export default {
   methods: {
-    test() {
-      console.log("this");
-      console.log(this.$route);
+    goHome() {
       this.$router.push({
-        path: "/test"
+        path: "/"
       });
     },
     KoreaFood(){

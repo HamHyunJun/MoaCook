@@ -5,7 +5,6 @@
       <ImageSlider/>
       <IconMenu/>
       <TodayFood/>
-      <BottomArea/>
     </div>
   </div>
 </template>
@@ -14,7 +13,6 @@
 import ImageSlider  from './ImageSlider.vue';
 import IconMenu from './IconMenu.vue'
 import TodayFood from './TodayFood.vue'
-import BottomArea from './BottomArea.vue'
 
 export default {
   name: 'HomeView', 
@@ -22,7 +20,6 @@ export default {
     ImageSlider,
     IconMenu,
     TodayFood,
-    BottomArea,
   },
   data() {
     return {
