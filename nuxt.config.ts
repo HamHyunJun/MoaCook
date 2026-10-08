@@ -6,6 +6,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'ko' },
+      // 앱(웹뷰)에서 노치/상태 표시줄 영역까지 화면을 채우고 safe-area 여백으로 피한다
+      viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
       title: 'MoaCook',
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
