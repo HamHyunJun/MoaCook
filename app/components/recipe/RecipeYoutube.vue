@@ -7,7 +7,7 @@
       </a>
     </div>
 
-    <p v-if="pending" class="message">참고 영상을 불러오는 중입니다…</p>
+    <p v-if="loading" class="message">참고 영상을 불러오는 중입니다…</p>
     <ul v-else-if="videos.length" class="video-grid">
       <li v-for="video in videos" :key="video.id">
         <a :href="video.url" target="_blank" rel="noopener noreferrer" class="video-card">
@@ -34,12 +34,14 @@ const props = defineProps<{
 const q = computed<string>(() => props.query)
 
 // 영상 목록은 상세 내용을 먼저 보여 준 뒤 브라우저에서 불러온다
-const { data, pending } = useFetch<YoutubeSearchResult>('/api/youtube/search', {
+const { data, status } = useFetch<YoutubeSearchResult>('/api/youtube/search', {
   query: { q },
   server: false,
   lazy: true,
 })
 
+// 서버 렌더링 시점(idle)도 불러오는 중으로 보여야 화면 복원(hydration) 결과가 서버와 같다
+const loading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending')
 const videos = computed<YoutubeVideo[]>(() => data.value?.videos ?? [])
 const searchUrl = computed<string>(() =>
   data.value?.searchUrl ?? `https://www.youtube.com/results?search_query=${encodeURIComponent(props.query)}`,
