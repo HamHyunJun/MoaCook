@@ -2,14 +2,14 @@
   <div class="header">
     <div class="logo">
       <div class="logo-image">
-        <img src="@/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="test()">
+        <img src="~/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="goHome">
       </div>
     </div>
     <div class="menu">
       <div class="search-form">
         <input type="text" class="search-input" placeholder="통합검색">
-        <button class="search-button" @click="onclick">
-          <img class="search-icon" src="@/assets/images/search.png" alt="Search Icon">
+        <button class="search-button">
+          <img class="search-icon" src="~/assets/images/search.png" alt="Search Icon">
         </button>
       </div>
       <ul class="menu-list">
@@ -20,7 +20,7 @@
     <nav class="nav">
       <ul class="nav-list">
         <li>
-          <button @click="KoreaFood()">한식 조리법</button>
+          <button @click="goKoreaFood">한식 조리법</button>
         </li>
         <li>
           <button>중식 조리법</button>
@@ -41,26 +41,17 @@
   <hr class="divider">
 </template>
 
-<script>
-export default {
-  methods: {
-    test() {
-      console.log("this");
-      console.log(this.$route);
-      this.$router.push({
-        path: "/test"
-      });
-    },
-    KoreaFood(){
-      this.$router.push({
-        path : '/menu/koreafood'
-      })
-    }
-  }
-};
+<script setup lang="ts">
+function goHome(): void {
+  navigateTo('/')
+}
+
+function goKoreaFood(): void {
+  navigateTo('/menu/koreafood')
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
   display: flex;
   height: 16vh;

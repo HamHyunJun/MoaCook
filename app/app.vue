@@ -1,24 +1,15 @@
 <template>
   <div id="app">
-    <div>
-      <HeaderComp></HeaderComp>
-    </div>
-    <router-view></router-view>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 
-<script>
-import HeaderComp from "./views/page/HeaderComp.vue"
-
-export default {
-  name: 'App',
-  components: {
-    HeaderComp
-  }
-}
+<script setup lang="ts">
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
