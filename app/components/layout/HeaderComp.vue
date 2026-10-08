@@ -6,37 +6,20 @@
       </NuxtLink>
 
       <form class="search-form" role="search" @submit.prevent="search">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
         <input
           v-model="keyword"
           type="search"
           class="search-input"
-          placeholder="통합검색"
+          placeholder="레시피, 재료 검색"
           aria-label="레시피 검색"
           maxlength="100"
         >
-        <button type="submit" class="search-button">
-          <img class="search-icon" src="~/assets/images/search.png" alt="검색">
-        </button>
+        <button type="submit" class="search-button">검색</button>
       </form>
-
-      <ul class="menu-list">
-        <li class="menu-item">로그인</li>
-        <li class="menu-item">회원가입</li>
-      </ul>
-
-      <nav class="nav" aria-label="카테고리">
-        <ul class="nav-list">
-          <li v-for="category in RECIPE_CATEGORIES" :key="category">
-            <NuxtLink
-              :to="{ path: '/recipes', query: { category } }"
-              class="nav-link"
-              :class="{ active: currentCategory === category }"
-            >
-              {{ category }} 조리법
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
     </div>
   </header>
 </template>
@@ -45,24 +28,19 @@
 const route = useRoute()
 const keyword = ref<string>('')
 
-const currentCategory = computed<RecipeCategory | undefined>(() => {
-  const category = route.query.category
-  return route.path === '/recipes' && isRecipeCategory(category) ? category : undefined
-})
-
 // 검색 결과 화면에서는 현재 검색어를 입력창에 보여 준다
 watch(
   () => route.fullPath,
   () => {
     const q = route.query.q
-    keyword.value = route.path === '/recipes' && typeof q === 'string' ? q : ''
+    keyword.value = route.path === '/' && typeof q === 'string' ? q : ''
   },
   { immediate: true },
 )
 
 function search(): void {
   const q = keyword.value.trim()
-  navigateTo({ path: '/recipes', query: q ? { q } : {} })
+  navigateTo({ path: '/', query: q ? { q } : {} })
 }
 </script>
 
@@ -70,152 +48,119 @@ function search(): void {
 @use '~/assets/scss/variables' as *;
 
 .header {
-  border-bottom: 2px solid $point-color;
-  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid $line-color;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
 }
 
 .header-inner {
-  display: grid;
-  grid-template-areas:
-    'logo search account'
-    'logo nav nav';
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  column-gap: 48px;
-  row-gap: 16px;
+  gap: 24px;
   max-width: $content-max-width;
+  height: 72px;
   margin: 0 auto;
-  padding: 20px 16px;
+  padding: 0 20px;
 }
 
 .logo {
-  grid-area: logo;
+  flex-shrink: 0;
   display: block;
 }
 
 .logo-image {
   display: block;
-  width: 150px;
+  width: 96px;
   height: auto;
 }
 
 .search-form {
-  grid-area: search;
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: $sub-text-color;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  height: 40px;
-  padding: 0 48px 0 16px;
-  border: 1px solid $sub-text-color;
+  height: 44px;
+  padding: 0 72px 0 44px;
+  border: 1px solid transparent;
   border-radius: 999px;
   outline: none;
-  font-size: 0.9rem;
-  box-sizing: border-box;
+  background-color: #F2F3F5;
+  color: $text-color;
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &::placeholder {
+    color: $sub-text-color;
+  }
 
   &:focus {
     border-color: $point-color;
+    background-color: $surface-color;
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
   }
 }
 
 .search-button {
   position: absolute;
-  top: 50%;
-  right: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
+  right: 5px;
+  height: 34px;
+  padding: 0 16px;
   border: none;
-  border-radius: 50%;
+  border-radius: 999px;
   background-color: $point-color;
-  cursor: pointer;
-  transform: translateY(-50%);
-}
-
-.search-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.menu-list {
-  grid-area: account;
-  display: flex;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.menu-item {
-  color: $sub-text-color;
+  color: $text-color;
   font-size: 0.85rem;
-  font-weight: 500;
-}
+  font-weight: 700;
+  cursor: pointer;
 
-.nav {
-  grid-area: nav;
-}
-
-.nav-list {
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.nav-link {
-  color: #000;
-  font-size: 1.05rem;
-  font-weight: bold;
-  text-decoration: none;
-  white-space: nowrap;
-
-  &:hover,
-  &.active {
-    color: $point-color;
+  &:hover {
+    background-color: $point-strong-color;
   }
 }
 
-@media (max-width: $tablet-max-width) {
+@media (max-width: $mobile-max-width) {
   .header-inner {
-    grid-template-areas:
-      'logo account'
-      'search search'
-      'nav nav';
-    grid-template-columns: auto auto;
-    justify-content: space-between;
-    row-gap: 12px;
-    padding: 12px 16px;
+    gap: 12px;
+    height: 64px;
+    padding: 0 16px;
   }
 
   .logo-image {
-    width: 96px;
+    width: 72px;
   }
 
-  .search-form {
-    max-width: none;
+  .search-input {
+    height: 40px;
+    font-size: 0.9rem;
   }
 
-  // 카테고리가 화면보다 길면 가로로 밀어서 본다
-  .nav {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .nav-list {
-    gap: 24px;
-    padding-bottom: 4px;
-  }
-
-  .nav-link {
-    font-size: 0.95rem;
+  .search-button {
+    height: 30px;
+    padding: 0 12px;
   }
 }
 </style>

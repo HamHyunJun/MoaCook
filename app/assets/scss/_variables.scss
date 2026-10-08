@@ -1,9 +1,22 @@
 // 공통 색상
 $point-color: #FFBD59;
+$point-strong-color: #F59E0B;
+$point-soft-color: #FFF6E5;
 $sub-text-color: #7F879E;
-$text-color: #2c3e50;
-$line-color: #eee;
+$text-color: #1F2330;
+$line-color: #EEF0F3;
+$bg-color: #FAFAF8;
+$surface-color: #fff;
 $error-color: #d93025;
+
+// 모양
+$radius-lg: 20px;
+$radius-md: 12px;
+$shadow-sm: 0 1px 2px rgba(31, 35, 48, 0.04), 0 2px 8px rgba(31, 35, 48, 0.04);
+$shadow-md: 0 8px 24px rgba(31, 35, 48, 0.08);
+
+// 글꼴
+$font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 
 // 공통 레이아웃
 $content-max-width: 1100px;

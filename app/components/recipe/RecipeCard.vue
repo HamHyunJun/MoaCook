@@ -37,42 +37,54 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  background-color: #fff;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
   color: $text-color;
   text-align: left;
   text-decoration: none;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+    transform: translateY(-4px);
+
+    .image {
+      transform: scale(1.04);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $point-color;
+    outline-offset: 3px;
   }
 }
 
 .image-wrap {
   position: relative;
+  overflow: hidden;
   aspect-ratio: 4 / 3;
-  background-color: #f5f5f5;
+  background-color: $line-color;
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
 .category {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 4px 10px;
+  top: 12px;
+  left: 12px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background-color: $point-color;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: $text-color;
+  font-size: 0.78rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
 }
 
 .body {
@@ -80,32 +92,41 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
   flex: 1;
   flex-direction: column;
   gap: 6px;
-  padding: 14px 16px 16px;
+  padding: 16px 18px 18px;
 }
 
 .name {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .description {
+  display: -webkit-box;
   flex: 1;
   margin: 0;
+  overflow: hidden;
   color: $sub-text-color;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.55;
   word-break: keep-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .meta {
   display: flex;
-  gap: 16px;
-  margin: 6px 0 0;
+  gap: 14px;
+  margin: 8px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid $line-color;
   font-size: 0.85rem;
 }
 
 .meta-item {
   display: flex;
+  align-items: center;
   gap: 6px;
 
   dt {
@@ -114,7 +135,7 @@ const difficultyStars = computed<string>(() => formatDifficulty(props.recipe.dif
 
   dd {
     margin: 0;
-    font-weight: bold;
+    font-weight: 600;
   }
 }
 

@@ -20,13 +20,23 @@
 
 body {
   margin: 0;
+  background-color: $bg-color;
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  font-family: $font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $text-color;
+  letter-spacing: -0.01em;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 </style>

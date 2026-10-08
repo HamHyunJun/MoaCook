@@ -1,6 +1,6 @@
 <template>
   <article v-if="recipe" class="recipe-detail">
-    <NuxtLink :to="{ path: '/recipes', query: { category: recipe.category } }" class="back-link">
+    <NuxtLink :to="{ path: '/', query: { category: recipe.category } }" class="back-link">
       ← {{ recipe.category }} 레시피 목록
     </NuxtLink>
 
@@ -95,34 +95,34 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 .recipe-detail {
   max-width: 960px;
   margin: 0 auto;
-  padding: 16px 16px 64px;
+  padding: 24px 20px 80px;
   text-align: left;
 }
 
 .back-link {
   display: inline-block;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   color: $sub-text-color;
   font-size: 0.9rem;
   text-decoration: none;
 
   &:hover {
-    color: $point-color;
+    color: $text-color;
   }
 }
 
 .summary {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 32px;
+  gap: 24px;
+  margin-bottom: 16px;
 }
 
 .hero {
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: $radius-lg;
   aspect-ratio: 4 / 3;
-  background-color: #f5f5f5;
+  background-color: $line-color;
 }
 
 .hero-image {
@@ -134,23 +134,25 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 .summary-body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .category {
   align-self: flex-start;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background-color: $point-color;
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: bold;
+  background-color: $point-soft-color;
+  color: $point-strong-color;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .name {
   margin: 0;
-  font-size: 1.9rem;
-  line-height: 1.3;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
 }
 
 .description {
@@ -165,9 +167,10 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin: 8px 0 0;
-  padding: 14px 0;
-  border-top: 1px solid $line-color;
-  border-bottom: 1px solid $line-color;
+  padding: 16px 0;
+  border-radius: $radius-md;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
   text-align: center;
 }
 
@@ -175,13 +178,13 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   dt {
     margin-bottom: 4px;
     color: $sub-text-color;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   dd {
     margin: 0;
     font-size: 1.05rem;
-    font-weight: bold;
+    font-weight: 700;
   }
 
   & + & {
@@ -195,21 +198,24 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 }
 
 .section {
-  margin-top: 36px;
+  margin-top: 40px;
 }
 
 .section-title {
-  margin: 0 0 14px;
-  padding-left: 10px;
-  border-left: 4px solid $point-color;
-  font-size: 1.35rem;
+  margin: 0 0 16px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .ingredients {
   display: grid;
   grid-template-columns: 1fr;
   margin: 0;
-  padding: 0;
+  padding: 8px 20px;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
   list-style: none;
 }
 
@@ -217,9 +223,13 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 4px;
-  border-bottom: 1px dashed $line-color;
-  font-size: 1.05rem;
+  padding: 14px 0;
+  border-bottom: 1px solid $line-color;
+  font-size: 1rem;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .ingredient-amount {
@@ -230,7 +240,7 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 .steps {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -238,28 +248,36 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
 
 .step {
   display: flex;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 12px;
-  background-color: #fffaf0;
+  gap: 16px;
+  padding: 20px;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
 }
 
 .step-number {
+  display: flex;
   flex-shrink: 0;
-  color: $point-color;
-  font-size: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: $point-soft-color;
+  color: $point-strong-color;
+  font-size: 0.9rem;
   font-weight: 800;
-  line-height: 1.2;
 }
 
 .step-body {
   flex: 1;
   min-width: 0;
+  padding-top: 5px;
 }
 
 .step-description {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1.7;
   word-break: keep-all;
 }
@@ -269,27 +287,32 @@ useHead({ title: () => (recipe.value ? `${recipe.value.name} | MoaCook` : 'MoaCo
   width: 100%;
   max-width: 480px;
   margin-top: 12px;
-  border-radius: 8px;
+  border-radius: $radius-md;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $tablet-max-width) {
   .recipe-detail {
-    padding-top: 24px;
+    padding-top: 32px;
   }
 
   .summary {
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    gap: 32px;
+    gap: 40px;
   }
 
   .name {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
   }
 
   .ingredients {
     grid-template-columns: 1fr 1fr;
-    column-gap: 32px;
+    column-gap: 40px;
+
+    // 두 줄 배치에서는 마지막 줄 두 항목 모두 밑줄을 없앤다
+    .ingredient:nth-last-child(2):nth-child(odd) {
+      border-bottom: none;
+    }
   }
 }
 </style>

@@ -68,9 +68,9 @@ function formatViewCount(count: number): string {
 
 .section-title {
   margin: 0;
-  padding-left: 10px;
-  border-left: 4px solid $point-color;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .search-link {
@@ -87,8 +87,9 @@ function formatViewCount(count: number): string {
 .message {
   margin: 0;
   padding: 20px;
-  border-radius: 12px;
-  background-color: #f8f8f8;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
+  box-shadow: $shadow-sm;
   color: $sub-text-color;
   text-align: center;
 }
@@ -108,14 +109,14 @@ function formatViewCount(count: number): string {
   text-decoration: none;
 
   &:hover .title {
-    color: $point-color;
+    color: $point-strong-color;
   }
 }
 
 .thumbnail-wrap {
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #f0f0f0;
+  border-radius: $radius-md;
+  background-color: $line-color;
   aspect-ratio: 16 / 9;
 }
 
