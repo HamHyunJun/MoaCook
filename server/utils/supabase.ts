@@ -22,7 +22,14 @@ export function getSupabaseConfig(): SupabaseConfig | undefined {
   }
 }
 
+/**
+ * 새 형식의 secret 키(sb_secret_...)는 apikey 헤더로만 보내고,
+ * 예전 형식의 service_role 키(JWT)는 Authorization 헤더에도 함께 보낸다.
+ */
 export function supabaseHeaders(config: SupabaseConfig): Record<string, string> {
+  if (config.serviceRoleKey.startsWith('sb_')) {
+    return { apikey: config.serviceRoleKey }
+  }
   return {
     apikey: config.serviceRoleKey,
     Authorization: `Bearer ${config.serviceRoleKey}`,
