@@ -59,6 +59,8 @@
         </li>
       </ol>
     </section>
+
+    <RecipeYoutube :query="recipe.youtubeQuery || recipe.name" class="section" />
   </article>
 </template>
 
