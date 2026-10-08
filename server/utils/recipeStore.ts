@@ -9,3 +9,7 @@ export function toRecipeSummary(recipe: Recipe): RecipeSummary {
   const { id, name, image, description, category, difficulty, cookingTime } = recipe
   return { id, name, image, description, category, difficulty, cookingTime }
 }
+
+export function findRecipe(id: string): Recipe | undefined {
+  return listRecipes().find(recipe => recipe.id === id)
+}
