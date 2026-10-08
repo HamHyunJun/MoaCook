@@ -17,7 +17,7 @@ export interface RecipeRepository {
 
 let repository: RecipeRepository | undefined
 
-export function recipeRepository(): RecipeRepository {
+export const recipeRepository = (): RecipeRepository => {
   if (!repository) {
     const config = getSupabaseConfig()
     repository = config ? createSupabaseRepository(config) : createLocalRepository()
@@ -31,7 +31,7 @@ const LOCAL_RECIPE_PREFIX = 'items'
 /** 예전 버전은 true로 저장했으므로 1로 본다 */
 const LOCAL_SEEDED_KEY = 'seeded'
 
-function createLocalRepository(): RecipeRepository {
+const createLocalRepository = (): RecipeRepository => {
   const storage = () => useStorage('recipes')
   const key = (id: string) => `${LOCAL_RECIPE_PREFIX}:${id}`
 
@@ -83,7 +83,7 @@ interface RecipeRow {
 
 const SEED_VERSION_KEY = 'seed_version'
 
-function toRow(recipe: Recipe): RecipeRow {
+const toRow = (recipe: Recipe): RecipeRow => {
   return {
     id: recipe.id,
     name: recipe.name,
@@ -100,7 +100,7 @@ function toRow(recipe: Recipe): RecipeRow {
   }
 }
 
-function fromRow(row: RecipeRow): Recipe {
+const fromRow = (row: RecipeRow): Recipe => {
   return {
     id: row.id,
     name: row.name,
@@ -118,13 +118,13 @@ function fromRow(row: RecipeRow): Recipe {
   }
 }
 
-function createSupabaseRepository(config: SupabaseConfig): RecipeRepository {
+const createSupabaseRepository = (config: SupabaseConfig): RecipeRepository => {
   const rest = $fetch.create({
     baseURL: `${config.url}/rest/v1`,
     headers: supabaseHeaders(config),
   })
 
-  async function request<T>(action: string, run: () => Promise<T>): Promise<T> {
+  const request = async <T>(action: string, run: () => Promise<T>): Promise<T> => {
     try {
       return await run()
     }

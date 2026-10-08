@@ -1,11 +1,11 @@
 import { RECIPE_CATEGORIES } from '../types/recipe'
 import type { RecipeCategory, RecipeDifficulty, RecipeSearchQuery } from '../types/recipe'
 
-export function isRecipeCategory(value: unknown): value is RecipeCategory {
+export const isRecipeCategory = (value: unknown): value is RecipeCategory => {
   return typeof value === 'string' && (RECIPE_CATEGORIES as readonly string[]).includes(value)
 }
 
-export function isRecipeDifficulty(value: unknown): value is RecipeDifficulty {
+export const isRecipeDifficulty = (value: unknown): value is RecipeDifficulty => {
   return value === 1 || value === 2 || value === 3
 }
 
@@ -18,11 +18,11 @@ const DIFFICULTY_LABELS: Record<RecipeDifficulty, string> = {
 }
 
 /** 난이도를 한눈에 읽히는 말로 변환 (예: 2 → "보통") */
-export function formatDifficulty(difficulty: RecipeDifficulty): string {
+export const formatDifficulty = (difficulty: RecipeDifficulty): string => {
   return DIFFICULTY_LABELS[difficulty]
 }
 
-function firstValue(value: unknown): unknown {
+const firstValue = (value: unknown): unknown => {
   return Array.isArray(value) ? value[0] : value
 }
 
@@ -30,7 +30,7 @@ function firstValue(value: unknown): unknown {
  * URL 쿼리(라우트 쿼리, 서버 getQuery 결과)를 검색 조건으로 변환한다.
  * 형식이 맞지 않는 값은 조건에서 제외한다.
  */
-export function parseRecipeSearchQuery(query: Record<string, unknown>): RecipeSearchQuery {
+export const parseRecipeSearchQuery = (query: Record<string, unknown>): RecipeSearchQuery => {
   const result: RecipeSearchQuery = {}
 
   const q = firstValue(query.q)

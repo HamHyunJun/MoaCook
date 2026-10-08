@@ -39,7 +39,7 @@ watch(
   { immediate: true },
 )
 
-function search(): void {
+const search = (): void => {
   const q = keyword.value.trim()
   navigateTo({ path: '/', query: q ? { q } : {} })
 }

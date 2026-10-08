@@ -50,7 +50,7 @@ if (current.admin) {
   await navigateTo(redirectPath.value, { replace: true })
 }
 
-async function onSubmit(): Promise<void> {
+const onSubmit = async (): Promise<void> => {
   submitting.value = true
   errorMessage.value = ''
   try {

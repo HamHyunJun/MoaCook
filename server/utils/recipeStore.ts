@@ -14,7 +14,7 @@ let seeding: Promise<void> | undefined
  *   없어진 카테고리(캠핑·자취)를 쓰는 레시피는 카테고리만 바꾼다.
  *   사용자가 수정하거나 삭제한 레시피는 그대로 둔다.
  */
-function ensureSeeded(): Promise<void> {
+const ensureSeeded = (): Promise<void> => {
   seeding ??= (async () => {
     const repository = recipeRepository()
     const appliedVersion = await repository.getSeedVersion()
@@ -57,20 +57,20 @@ function ensureSeeded(): Promise<void> {
 }
 
 /** 레시피 전체 조회 (등록 순서대로) */
-export async function listRecipes(): Promise<Recipe[]> {
+export const listRecipes = async (): Promise<Recipe[]> => {
   await ensureSeeded()
   const recipes = await recipeRepository().list()
   return recipes.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
 }
 
-export async function findRecipe(id: string): Promise<Recipe | undefined> {
+export const findRecipe = async (id: string): Promise<Recipe | undefined> => {
   if (!RECIPE_ID_PATTERN.test(id)) return undefined
 
   await ensureSeeded()
   return recipeRepository().get(id)
 }
 
-export async function createRecipe(input: RecipeContent): Promise<Recipe> {
+export const createRecipe = async (input: RecipeContent): Promise<Recipe> => {
   await ensureSeeded()
   const now = new Date().toISOString()
   const recipe: Recipe = { ...input, id: randomUUID(), createdAt: now, updatedAt: now }
@@ -80,7 +80,7 @@ export async function createRecipe(input: RecipeContent): Promise<Recipe> {
 }
 
 /** 레시피 수정, 없는 id면 undefined */
-export async function updateRecipe(id: string, input: RecipeContent): Promise<Recipe | undefined> {
+export const updateRecipe = async (id: string, input: RecipeContent): Promise<Recipe | undefined> => {
   const current = await findRecipe(id)
   if (!current) return undefined
 
@@ -96,14 +96,14 @@ export async function updateRecipe(id: string, input: RecipeContent): Promise<Re
 }
 
 /** 레시피 삭제, 삭제했으면 true */
-export async function deleteRecipe(id: string): Promise<boolean> {
+export const deleteRecipe = async (id: string): Promise<boolean> => {
   if (!RECIPE_ID_PATTERN.test(id)) return false
 
   await ensureSeeded()
   return recipeRepository().remove(id)
 }
 
-export function toRecipeSummary(recipe: Recipe): RecipeSummary {
+export const toRecipeSummary = (recipe: Recipe): RecipeSummary => {
   const { id, name, image, description, category, difficulty, cookingTime } = recipe
   return { id, name, image, description, category, difficulty, cookingTime }
 }

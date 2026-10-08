@@ -7,11 +7,11 @@ const MAX_LIST_LENGTH = 100
 
 type JsonObject = Record<string, unknown>
 
-function isObject(value: unknown): value is JsonObject {
+const isObject = (value: unknown): value is JsonObject => {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-function readString(value: unknown): string | undefined {
+const readString = (value: unknown): string | undefined => {
   return typeof value === 'string' ? value.trim() : undefined
 }
 
@@ -19,7 +19,7 @@ function readString(value: unknown): string | undefined {
  * 등록/수정 요청 본문(RecipeInput)을 검증해 RecipeContent로 변환한다.
  * 잘못된 항목이 있으면 모든 오류 메시지를 담아 400 오류를 던진다.
  */
-export function parseRecipeInput(body: unknown): RecipeContent {
+export const parseRecipeInput = (body: unknown): RecipeContent => {
   const errors: string[] = []
 
   if (!isObject(body)) {
@@ -77,7 +77,7 @@ export function parseRecipeInput(body: unknown): RecipeContent {
   }
 }
 
-function parseIngredients(value: unknown, errors: string[]): RecipeIngredient[] {
+const parseIngredients = (value: unknown, errors: string[]): RecipeIngredient[] => {
   if (!Array.isArray(value) || value.length === 0 || value.length > MAX_LIST_LENGTH) {
     errors.push(`재료를 1~${MAX_LIST_LENGTH}개 입력해 주세요.`)
     return []
@@ -96,7 +96,7 @@ function parseIngredients(value: unknown, errors: string[]): RecipeIngredient[] 
   })
 }
 
-function parseSteps(value: unknown, errors: string[]): RecipeStep[] {
+const parseSteps = (value: unknown, errors: string[]): RecipeStep[] => {
   if (!Array.isArray(value) || value.length === 0 || value.length > MAX_LIST_LENGTH) {
     errors.push(`조리 과정을 1~${MAX_LIST_LENGTH}개 입력해 주세요.`)
     return []

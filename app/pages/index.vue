@@ -121,6 +121,15 @@ const title = computed<string>(() => {
   return category ? `${category} 레시피` : '오늘은 뭘 만들어 볼까요?'
 })
 
+const toRouteQuery = (query: RecipeSearchQuery): Record<string, string> => {
+  const result: Record<string, string> = {}
+  if (query.q) result.q = query.q
+  if (query.category) result.category = query.category
+  if (query.difficulty) result.difficulty = String(query.difficulty)
+  if (query.maxTime) result.maxTime = String(query.maxTime)
+  return result
+}
+
 const { cache, lastListPath } = useRecipeList()
 const nuxtApp = useNuxtApp()
 const cacheKey = computed<string>(() => new URLSearchParams(toRouteQuery(searchQuery.value)).toString())
@@ -152,21 +161,12 @@ onMounted(() => {
   if (restoredFromCache) refresh()
 })
 
-function toRouteQuery(query: RecipeSearchQuery): Record<string, string> {
-  const result: Record<string, string> = {}
-  if (query.q) result.q = query.q
-  if (query.category) result.category = query.category
-  if (query.difficulty) result.difficulty = String(query.difficulty)
-  if (query.maxTime) result.maxTime = String(query.maxTime)
-  return result
-}
-
 /** 검색 조건을 URL 쿼리에 반영한다 (뒤로 가기 기록이 쌓이지 않도록 replace) */
-function updateQuery(patch: Partial<RecipeSearchQuery>): void {
+const updateQuery = (patch: Partial<RecipeSearchQuery>): void => {
   navigateTo({ path: '/', query: toRouteQuery({ ...searchQuery.value, ...patch }) }, { replace: true })
 }
 
-function resetQuery(): void {
+const resetQuery = (): void => {
   navigateTo({ path: '/' }, { replace: true })
 }
 

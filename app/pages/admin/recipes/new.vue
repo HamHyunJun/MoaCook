@@ -19,7 +19,7 @@ const { createRecipe } = useRecipes()
 const submitting = ref(false)
 const serverErrors = ref<string[]>([])
 
-async function onSubmit(input: RecipeInput): Promise<void> {
+const onSubmit = async (input: RecipeInput): Promise<void> => {
   submitting.value = true
   serverErrors.value = []
   try {

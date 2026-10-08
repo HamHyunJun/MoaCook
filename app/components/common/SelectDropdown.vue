@@ -85,11 +85,11 @@ const selectedLabel = computed<string>(() =>
   props.options.find(option => option.value === props.modelValue)?.label ?? props.allLabel,
 )
 
-function optionId(index: number): string {
+const optionId = (index: number): string => {
   return `${uid}-option-${index}`
 }
 
-async function open(): Promise<void> {
+const open = async (): Promise<void> => {
   const selectedIndex = allOptions.value.findIndex(option => option.value === props.modelValue)
   activeIndex.value = Math.max(selectedIndex, 0)
   isOpen.value = true
@@ -97,29 +97,29 @@ async function open(): Promise<void> {
   listbox.value?.focus()
 }
 
-function close(focusTrigger = false): void {
+const close = (focusTrigger = false): void => {
   isOpen.value = false
   if (focusTrigger) trigger.value?.focus()
 }
 
-function toggle(): void {
+const toggle = (): void => {
   if (isOpen.value) close()
   else open()
 }
 
-function select(value: T | undefined): void {
+const select = (value: T | undefined): void => {
   emit('update:modelValue', value)
   close(true)
 }
 
-function onTriggerKeydown(event: KeyboardEvent): void {
+const onTriggerKeydown = (event: KeyboardEvent): void => {
   if (['ArrowDown', 'ArrowUp'].includes(event.key) && !isOpen.value) {
     event.preventDefault()
     open()
   }
 }
 
-function onListKeydown(event: KeyboardEvent): void {
+const onListKeydown = (event: KeyboardEvent): void => {
   const lastIndex = allOptions.value.length - 1
 
   switch (event.key) {
@@ -157,7 +157,7 @@ function onListKeydown(event: KeyboardEvent): void {
 }
 
 // 바깥을 누르면 닫는다
-function onDocumentPointerDown(event: PointerEvent): void {
+const onDocumentPointerDown = (event: PointerEvent): void => {
   if (isOpen.value && root.value && !root.value.contains(event.target as Node)) {
     close()
   }

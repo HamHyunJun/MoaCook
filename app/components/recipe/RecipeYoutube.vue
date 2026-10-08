@@ -49,7 +49,7 @@ const searchUrl = computed<string>(() =>
 
 const viewCountFormatter = new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 })
 
-function formatViewCount(count: number): string {
+const formatViewCount = (count: number): string => {
   return `${viewCountFormatter.format(count)}회`
 }
 </script>

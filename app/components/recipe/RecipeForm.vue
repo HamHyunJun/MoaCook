@@ -165,20 +165,20 @@ const DIFFICULTIES: RecipeDifficulty[] = [1, 2, 3]
 const { uploadImage } = useRecipes()
 
 let rowSeq = 0
-function nextKey(): string {
+const nextKey = (): string => {
   rowSeq += 1
   return `row-${rowSeq}`
 }
 
-function emptyIngredient(): IngredientRow {
+const emptyIngredient = (): IngredientRow => {
   return { key: nextKey(), name: '', amount: '' }
 }
 
-function emptyStep(): StepRow {
+const emptyStep = (): StepRow => {
   return { key: nextKey(), description: '' }
 }
 
-function toFormState(recipe?: Recipe): RecipeFormState {
+const toFormState = (recipe?: Recipe): RecipeFormState => {
   if (!recipe) {
     return {
       name: '',
@@ -214,19 +214,19 @@ const uploading = ref(false)
 
 const errorMessages = computed<string[]>(() => [...clientErrors.value, ...props.serverErrors])
 
-function addIngredient(): void {
+const addIngredient = (): void => {
   form.ingredients.push(emptyIngredient())
 }
 
-function addStep(): void {
+const addStep = (): void => {
   form.steps.push(emptyStep())
 }
 
-function removeRow<T>(rows: T[], index: number): void {
+const removeRow = <T,>(rows: T[], index: number): void => {
   rows.splice(index, 1)
 }
 
-function moveRow<T>(rows: T[], index: number, offset: -1 | 1): void {
+const moveRow = <T,>(rows: T[], index: number, offset: -1 | 1): void => {
   const target = index + offset
   const row = rows[index]
   const other = rows[target]
@@ -236,7 +236,7 @@ function moveRow<T>(rows: T[], index: number, offset: -1 | 1): void {
   rows[target] = row
 }
 
-async function onImageSelected(event: Event): Promise<void> {
+const onImageSelected = async (event: Event): Promise<void> => {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
@@ -256,7 +256,7 @@ async function onImageSelected(event: Event): Promise<void> {
   }
 }
 
-function validate(): string[] {
+const validate = (): string[] => {
   const errors: string[] = []
   if (!form.name.trim()) errors.push('요리 이름을 입력해 주세요.')
   if (!form.image.trim()) errors.push('대표 이미지를 등록해 주세요.')
@@ -267,7 +267,7 @@ function validate(): string[] {
   return errors
 }
 
-function onSubmit(): void {
+const onSubmit = (): void => {
   clientErrors.value = validate()
   if (clientErrors.value.length > 0) return
 
