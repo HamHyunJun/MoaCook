@@ -17,9 +17,14 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components', pathPrefix: false },
   ],
+  // 서버 전용 설정 (클라이언트에 노출되지 않음), 같은 이름의 NUXT_ 환경변수로 설정 (.env.example 참고)
   runtimeConfig: {
-    // 서버 전용 (클라이언트에 노출되지 않음), 환경변수 NUXT_YOUTUBE_API_KEY로 설정
-    youtubeApiKey: '',
+    youtubeApiKey: '', // NUXT_YOUTUBE_API_KEY
+    adminPassword: '', // NUXT_ADMIN_PASSWORD
+    sessionSecret: '', // NUXT_SESSION_SECRET
+    supabaseUrl: '', // NUXT_SUPABASE_URL
+    supabaseServiceRoleKey: '', // NUXT_SUPABASE_SERVICE_ROLE_KEY
+    supabaseBucket: 'recipe-images', // NUXT_SUPABASE_BUCKET
   },
   nitro: {
     // 레시피 데이터와 업로드 이미지는 .data 폴더에 파일로 저장 (git 제외)

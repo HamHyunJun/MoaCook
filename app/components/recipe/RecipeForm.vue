@@ -26,7 +26,7 @@
               >
             </label>
             <input v-model="form.image" type="text" placeholder="또는 이미지 주소 입력">
-            <p class="hint">JPG, PNG, WEBP, GIF / 5MB 이하</p>
+            <p class="hint">JPG, PNG, WEBP, GIF / 4MB 이하</p>
           </div>
         </div>
       </div>
