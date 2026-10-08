@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MoaCook</string>
+    <string name="title_activity_main">MoaCook</string>
+    <string name="package_name">com.moacook.app</string>
+    <string name="custom_url_scheme">com.moacook.app</string>
+</resources>

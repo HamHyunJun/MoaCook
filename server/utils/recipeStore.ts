@@ -1,27 +1,11 @@
 import { randomUUID } from 'node:crypto'
 import { SEED_VERSION, seedRecipes } from '../data/recipes'
 
-const RECIPE_PREFIX = 'items'
-/** 마지막으로 반영한 초기 데이터 버전 (예전 버전은 true로 저장되어 있음 = 1) */
-const SEEDED_KEY = 'seeded'
 const RECIPE_ID_PATTERN = /^[\w-]{1,100}$/
 /** 예전 초기 데이터가 쓰던 저해상도 이미지 경로 */
 const LEGACY_SEED_IMAGE_PREFIX = '/images/recipes/'
 
 let seeding: Promise<void> | undefined
-
-function recipeStorage() {
-  return useStorage('recipes')
-}
-
-function recipeKey(id: string): string {
-  return `${RECIPE_PREFIX}:${id}`
-}
-
-function toSeedVersion(value: unknown): number {
-  if (typeof value === 'number') return value
-  return value ? 1 : 0
-}
 
 /**
  * 초기 데이터를 저장소에 반영한다.
@@ -31,22 +15,22 @@ function toSeedVersion(value: unknown): number {
  */
 function ensureSeeded(): Promise<void> {
   seeding ??= (async () => {
-    const storage = recipeStorage()
-    const appliedVersion = toSeedVersion(await storage.getItem(SEEDED_KEY))
+    const repository = recipeRepository()
+    const appliedVersion = await repository.getSeedVersion()
     if (appliedVersion >= SEED_VERSION) return
 
     for (const { recipe, since } of seedRecipes) {
-      const current = await storage.getItem<Recipe>(recipeKey(recipe.id))
+      const current = await repository.get(recipe.id)
 
       if (!current) {
-        if (since > appliedVersion) await storage.setItem(recipeKey(recipe.id), recipe)
+        if (since > appliedVersion) await repository.save(recipe)
       }
       else if (current.image.startsWith(LEGACY_SEED_IMAGE_PREFIX)) {
-        await storage.setItem(recipeKey(recipe.id), { ...current, image: recipe.image })
+        await repository.save({ ...current, image: recipe.image })
       }
     }
 
-    await storage.setItem(SEEDED_KEY, SEED_VERSION)
+    await repository.setSeedVersion(SEED_VERSION)
   })().catch((error: unknown) => {
     seeding = undefined
     throw error
@@ -58,20 +42,15 @@ function ensureSeeded(): Promise<void> {
 /** 레시피 전체 조회 (등록 순서대로) */
 export async function listRecipes(): Promise<Recipe[]> {
   await ensureSeeded()
-  const storage = recipeStorage()
-  const keys = await storage.getKeys(RECIPE_PREFIX)
-  const recipes = await Promise.all(keys.map(key => storage.getItem<Recipe>(key)))
-
-  return recipes
-    .filter((recipe): recipe is Recipe => recipe !== null)
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+  const recipes = await recipeRepository().list()
+  return recipes.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
 }
 
 export async function findRecipe(id: string): Promise<Recipe | undefined> {
   if (!RECIPE_ID_PATTERN.test(id)) return undefined
 
   await ensureSeeded()
-  return (await recipeStorage().getItem<Recipe>(recipeKey(id))) ?? undefined
+  return recipeRepository().get(id)
 }
 
 export async function createRecipe(input: RecipeContent): Promise<Recipe> {
@@ -79,7 +58,7 @@ export async function createRecipe(input: RecipeContent): Promise<Recipe> {
   const now = new Date().toISOString()
   const recipe: Recipe = { ...input, id: randomUUID(), createdAt: now, updatedAt: now }
 
-  await recipeStorage().setItem(recipeKey(recipe.id), recipe)
+  await recipeRepository().save(recipe)
   return recipe
 }
 
@@ -95,17 +74,16 @@ export async function updateRecipe(id: string, input: RecipeContent): Promise<Re
     updatedAt: new Date().toISOString(),
   }
 
-  await recipeStorage().setItem(recipeKey(id), recipe)
+  await recipeRepository().save(recipe)
   return recipe
 }
 
 /** 레시피 삭제, 삭제했으면 true */
 export async function deleteRecipe(id: string): Promise<boolean> {
-  const current = await findRecipe(id)
-  if (!current) return false
+  if (!RECIPE_ID_PATTERN.test(id)) return false
 
-  await recipeStorage().removeItem(recipeKey(id))
-  return true
+  await ensureSeeded()
+  return recipeRepository().remove(id)
 }
 
 export function toRecipeSummary(recipe: Recipe): RecipeSummary {

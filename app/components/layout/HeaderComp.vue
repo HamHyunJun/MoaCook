@@ -51,6 +51,7 @@ function search(): void {
   position: sticky;
   top: 0;
   z-index: 10;
+  padding-top: env(safe-area-inset-top);
   border-bottom: 1px solid $line-color;
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: saturate(180%) blur(12px);
