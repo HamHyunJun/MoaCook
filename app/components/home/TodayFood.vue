@@ -3,7 +3,7 @@
         <div class="RecMenu">
             <h2>
                 오늘의 추천 메뉴
-                <img src="~/assets/images/TodayFood.png">
+                <img src="~/assets/images/TodayFood.png" alt="" class="title-icon">
             </h2>
         </div>
         <div class="Menu">
@@ -29,42 +29,68 @@ const recommendedRecipes = computed<RecipeSummary[]>(() => (recipes.value ?? [])
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 .TodayFood {
-    position: absolute;
-    top: 86vh; 
-    left: 14vw; 
-    height: 35vh; 
-    width: 65vw; 
+    text-align: left;
 }
-.RecMenu {
-    position: absolute;
-    top: 1vh; 
-    left: 2vw; 
-}
-.Menu {
+
+.RecMenu h2 {
     display: flex;
-    position: absolute;
-    height: 30vh; 
-    top: 10vh; 
-    left: 1vw; 
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 16px;
+    font-size: 1.5rem;
 }
+
+.title-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.Menu {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
 .Menu-item {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     color: inherit;
     text-decoration: none;
-    align-items: center;
-    margin: 0 1vw; 
+
+    &:hover .explain {
+        color: $point-color;
+    }
 }
-.Menu-Image{
-    border-radius: 5%;
+
+.Menu-Image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    object-fit: cover;
 }
-.explain{
-    display: inline-block;
-    text-overflow:ellipsis;
-    word-break:keep-all;
-    top: 70%;
-    left: 10%;
-    margin: 0 1vw; 
-    text-align: left;
+
+.explain {
+    padding: 0 4px;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+@media (max-width: $mobile-max-width) {
+    .RecMenu h2 {
+        font-size: 1.25rem;
+    }
+
+    .Menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 12px;
+    }
+
+    .explain {
+        font-size: 0.9rem;
+    }
 }
 </style>

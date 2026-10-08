@@ -1,16 +1,14 @@
 <template>
   <div class="slider-wrapper">
     <div class="slider-container">
-      <div class="slider">
-        <div class="slides" :style="{ transform: 'translateX(' + slideOffset + 'vw)' }">
-          <div v-for="(img, index) in images" :key="index" class="slide">
-            <img :src="img" class="slide-img">
-          </div>
+      <div class="slides" :style="{ transform: `translateX(-${slideIndex * 100}%)` }">
+        <div v-for="(img, index) in images" :key="index" class="slide">
+          <img :src="img" :alt="`메인 배너 ${index + 1}`" class="slide-img">
         </div>
       </div>
     </div>
-    <div class="sideImage">
-      <img :src="sideImage" class="side-img">
+    <div class="side-image">
+      <img :src="sideImage" alt="이벤트 배너" class="side-img">
     </div>
   </div>
 </template>
@@ -22,11 +20,8 @@ import slide03 from '~/assets/images/slide03.jpg'
 import side1 from '~/assets/images/side1.jpg'
 
 const images: string[] = [slide01, slide02, slide03]
-const slideIndex = ref(0)
-const slideWidth = 45 // 이미지 너비 (vw 단위)
+const slideIndex = ref<number>(0)
 const sideImage = side1
-
-const slideOffset = computed<number>(() => -slideIndex.value * slideWidth)
 
 let timer: ReturnType<typeof setInterval> | undefined
 
@@ -44,58 +39,59 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/variables' as *;
+
 .slider-wrapper {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2vh 5vw; 
-  width: 100vw; 
-  height: 50vh; 
-  box-sizing: border-box;
-  overflow: hidden; 
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  gap: 16px;
 }
 
 .slider-container {
-  position: absolute;
-  top: 0%;
-  left: 15vw; 
-  width: 45vw; 
-  height: 50vh; 
   overflow: hidden;
+  border-radius: 8px;
+  aspect-ratio: 16 / 9;
 }
 
 .slides {
   display: flex;
+  height: 100%;
   transition: transform 0.5s ease-in-out;
-  width: 240vw; 
 }
 
 .slide {
-  flex: 0 0 45vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 0 0 100%;
+  height: 100%;
 }
 
-.slide-img {
-  width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.sideImage {
-  position: absolute;
-  top: 0%;
-  left: 60vw; 
-  width: 20vw; 
-  height: 80vh; 
-  overflow: hidden;
-}
-
+.slide-img,
 .side-img {
-  max-width: 89.5%;
-  max-height: 100%;
-  object-fit: contain;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.side-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+// 세로로 긴 배너가 슬라이더 높이를 늘리지 않도록 영역 안에 맞춘다
+.side-img {
+  position: absolute;
+  inset: 0;
+  object-position: top;
+}
+
+@media (max-width: $mobile-max-width) {
+  .slider-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .side-image {
+    display: none;
+  }
 }
 </style>
