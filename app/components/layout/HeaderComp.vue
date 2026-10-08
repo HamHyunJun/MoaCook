@@ -1,11 +1,10 @@
 <template>
-  <div class="header">
-    <div class="logo">
-      <div class="logo-image">
-        <img src="~/assets/images/MoaCook2.png" alt="MoaCook Logo" @click="goHome">
-      </div>
-    </div>
-    <div class="menu">
+  <header class="header">
+    <div class="header-inner">
+      <NuxtLink to="/" class="logo" aria-label="MoaCook 홈">
+        <img src="~/assets/images/MoaCook2.png" alt="MoaCook" class="logo-image">
+      </NuxtLink>
+
       <form class="search-form" role="search" @submit.prevent="search">
         <input
           v-model="keyword"
@@ -19,26 +18,37 @@
           <img class="search-icon" src="~/assets/images/search.png" alt="검색">
         </button>
       </form>
+
       <ul class="menu-list">
         <li class="menu-item">로그인</li>
         <li class="menu-item">회원가입</li>
       </ul>
+
+      <nav class="nav" aria-label="카테고리">
+        <ul class="nav-list">
+          <li v-for="category in RECIPE_CATEGORIES" :key="category">
+            <NuxtLink
+              :to="{ path: '/recipes', query: { category } }"
+              class="nav-link"
+              :class="{ active: currentCategory === category }"
+            >
+              {{ category }} 조리법
+            </NuxtLink>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <nav class="nav">
-      <ul class="nav-list">
-        <li v-for="category in RECIPE_CATEGORIES" :key="category">
-          <button @click="goCategory(category)">{{ category }} 조리법</button>
-        </li>
-      </ul>
-    </nav>
-    <hr>
-  </div>
-  <hr class="divider">
+  </header>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const keyword = ref<string>('')
+
+const currentCategory = computed<RecipeCategory | undefined>(() => {
+  const category = route.query.category
+  return route.path === '/recipes' && isRecipeCategory(category) ? category : undefined
+})
 
 // 검색 결과 화면에서는 현재 검색어를 입력창에 보여 준다
 watch(
@@ -54,181 +64,158 @@ function search(): void {
   const q = keyword.value.trim()
   navigateTo({ path: '/recipes', query: q ? { q } : {} })
 }
-
-function goHome(): void {
-  navigateTo('/')
-}
-
-function goCategory(category: RecipeCategory): void {
-  navigateTo({ path: '/recipes', query: { category } })
-}
 </script>
 
 <style lang="scss" scoped>
 @use '~/assets/scss/variables' as *;
 
 .header {
-  display: flex;
-  height: 16vh;
-  justify-content: space-between;
+  border-bottom: 2px solid $point-color;
+  background-color: #fff;
+}
+
+.header-inner {
+  display: grid;
+  grid-template-areas:
+    'logo search account'
+    'logo nav nav';
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  padding: 1vh 1vw 0;
+  column-gap: 48px;
+  row-gap: 16px;
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: 20px 16px;
 }
 
 .logo {
-  width: 30vw;
-  margin-left: -5vw;
+  grid-area: logo;
+  display: block;
 }
+
 .logo-image {
-  width: 14vw;
-  left: 16vw;
-  margin-top: 3vh;
-  padding-bottom: 40%;
-  position: relative;
-  overflow: hidden;
-}
-
-.logo img {
-  position: absolute;
-  top: -1vh;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.menu {
-  position: absolute;
-  left: 40vw;
-  width: 80vw;
-}
-
-.menu-list {
-  position: absolute;
-  list-style: none;
-  display: flex;
-  right: 40vw;
-  top: -7vh;
-}
-
-.menu-item {
-  font-size: 0.9vw; 
-  font-weight: 500;
-  color: $sub-text-color;
-  margin-right: 2vw; 
+  display: block;
+  width: 150px;
+  height: auto;
 }
 
 .search-form {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  top: -7vh;
-  left: -3vw; 
+  grid-area: search;
+  position: relative;
   width: 100%;
+  max-width: 360px;
 }
 
 .search-input {
-  width: 30%;
-  max-width: 28vw; 
-  height: 4vh; 
-  padding-left: 1vw; 
-  border: 0.1vw solid $sub-text-color; 
-  border-radius: 2vw; 
+  width: 100%;
+  height: 40px;
+  padding: 0 48px 0 16px;
+  border: 1px solid $sub-text-color;
+  border-radius: 999px;
   outline: none;
-  font-size: 0.8vw; 
+  font-size: 0.9rem;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $point-color;
+  }
 }
 
 .search-button {
   position: absolute;
-  width: 1.9vw; 
-  height: 1.9vw; 
-  left: 22.7vw; 
-  border: 0.1vw solid $point-color; 
-  border-radius: 2vw; 
+  top: 50%;
+  right: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
   background-color: $point-color;
   cursor: pointer;
-  outline: none;
+  transform: translateY(-50%);
 }
 
 .search-icon {
-  width: 90%; 
-  height: auto; 
+  width: 18px;
+  height: 18px;
+}
+
+.menu-list {
+  grid-area: account;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item {
+  color: $sub-text-color;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.nav {
+  grid-area: nav;
 }
 
 .nav-list {
-  position: absolute;
-  list-style: none;
   display: flex;
-  margin-top: 2vh; 
-  margin-right: 2vw;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.nav-list button{
-  background-color: white;
-  border: none;
-  font-size: 1.1vw;
+.nav-link {
+  color: #000;
+  font-size: 1.05rem;
   font-weight: bold;
-  margin-left: 3vw;
-}
-
-.nav-list button:hover{
-  color: $point-color;
-  cursor: pointer;
-}
-
-.nav-list a{
   text-decoration: none;
-  color: black;
+  white-space: nowrap;
+
+  &:hover,
+  &.active {
+    color: $point-color;
+  }
 }
 
-.nav-list a:hover{
-  color: $point-color;
-  cursor: pointer;
-}
-
-.divider {
-  height: 0.2vh; 
-  background-color: $point-color;
-  border: 0;
-  margin-top: 0.2vh; 
-}
-
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 5vh 5vw 0;
+@media (max-width: $tablet-max-width) {
+  .header-inner {
+    grid-template-areas:
+      'logo account'
+      'search search'
+      'nav nav';
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    row-gap: 12px;
+    padding: 12px 16px;
   }
 
-  .menu-list {
-    margin-top: 2vh;
+  .logo-image {
+    width: 96px;
   }
 
   .search-form {
-    margin-top: 2vh;
-    width: 100%;
+    max-width: none;
   }
 
-  .search-input {
-    font-size: 4vw; 
-  }
-
-  .search-button {
-    margin-left: 0;
-    margin-top: 2vh;
+  // 카테고리가 화면보다 길면 가로로 밀어서 본다
+  .nav {
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
   .nav-list {
-    margin-top: 4vh;
-    flex-direction: column;
-    align-items: center;
+    gap: 24px;
+    padding-bottom: 4px;
   }
 
-  .nav-list li {
-    margin-right: 0;
-    margin-bottom: 2vh;
+  .nav-link {
+    font-size: 0.95rem;
   }
 }
 </style>
