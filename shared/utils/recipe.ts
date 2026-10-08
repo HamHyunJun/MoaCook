@@ -9,12 +9,17 @@ export function isRecipeDifficulty(value: unknown): value is RecipeDifficulty {
   return value === 1 || value === 2 || value === 3
 }
 
-const MAX_DIFFICULTY = 3
 const MAX_SEARCH_LENGTH = 100
 
-/** 난이도를 별점 문자열로 변환 (예: 2 → "★★☆") */
+const DIFFICULTY_LABELS: Record<RecipeDifficulty, string> = {
+  1: '쉬움',
+  2: '보통',
+  3: '어려움',
+}
+
+/** 난이도를 한눈에 읽히는 말로 변환 (예: 2 → "보통") */
 export function formatDifficulty(difficulty: RecipeDifficulty): string {
-  return '★'.repeat(difficulty) + '☆'.repeat(MAX_DIFFICULTY - difficulty)
+  return DIFFICULTY_LABELS[difficulty]
 }
 
 function firstValue(value: unknown): unknown {

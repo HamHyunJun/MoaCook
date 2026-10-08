@@ -1,30 +1,38 @@
 // 공통 색상
-$point-color: #FFBD59;
-$point-strong-color: #F59E0B;
-$point-soft-color: #FFF6E5;
-$sub-text-color: #7F879E;
-$text-color: #1F2330;
-$line-color: #EEF0F3;
-$bg-color: #FAFAF8;
+// 포인트 색은 식욕을 돋우는 토마토 레드, 나머지는 차분한 무채색으로 맞춘다
+$point-color: #F2542D;
+$point-strong-color: #D63F1A;
+$point-soft-color: #FFF0EB;
+$text-color: #16181D;
+$sub-text-color: #6B7180;
+$muted-text-color: #9AA0AC;
+$line-color: #E4E6EB;
+$line-strong-color: #CDD1D8;
+$fill-color: #F3F4F6;
+$bg-color: #FFFFFF;
 $surface-color: #fff;
-$error-color: #d93025;
+$error-color: #D92D20;
+
+// 선
+$border-width: 1.5px;
 
 // 모양
-$radius-lg: 20px;
+$radius-lg: 18px;
 $radius-md: 12px;
-$shadow-sm: 0 1px 2px rgba(31, 35, 48, 0.04), 0 2px 8px rgba(31, 35, 48, 0.04);
-$shadow-md: 0 8px 24px rgba(31, 35, 48, 0.08);
+$radius-sm: 8px;
+$shadow-sm: 0 1px 2px rgba(22, 24, 29, 0.06);
+$shadow-md: 0 12px 32px rgba(22, 24, 29, 0.12);
 
 // 글꼴
 $font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 
 // 글자 크기 (제목 → 본문 → 보조)
-$font-size-display: 2.75rem;
-$font-size-h1: 2.25rem;
+$font-size-display: 2.5rem;
+$font-size-h1: 2.125rem;
 $font-size-h2: 1.375rem;
-$font-size-h3: 1.1875rem;
+$font-size-h3: 1.125rem;
 $font-size-body: 1rem;
-$font-size-small: 0.875rem;
+$font-size-small: 0.9375rem;
 $font-size-caption: 0.8125rem;
 
 // 제목용 자간 (한글 제목은 살짝 좁혀야 단단해 보인다)
@@ -32,7 +40,7 @@ $tracking-tight: -0.035em;
 $tracking-snug: -0.02em;
 
 // 공통 레이아웃
-$content-max-width: 1100px;
+$content-max-width: 1200px;
 
 // 반응형 기준 (이 너비 이하를 모바일로 본다)
 $mobile-max-width: 600px;

@@ -47,20 +47,22 @@ watch(
 @use '~/assets/scss/variables' as *;
 
 .confirm-dialog {
-  width: min(90vw, 360px);
-  padding: 24px;
+  width: min(90vw, 380px);
+  padding: 28px 24px 24px;
   border: none;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  color: $text-color;
 
   &::backdrop {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(22, 24, 29, 0.5);
   }
 }
 
 .message {
-  margin: 0 0 20px;
-  font-size: 1.05rem;
+  margin: 0 0 24px;
+  font-size: 1.0625rem;
+  font-weight: 650;
   line-height: 1.5;
   text-align: center;
   word-break: keep-all;
@@ -73,11 +75,11 @@ watch(
 
 .button {
   flex: 1;
-  padding: 10px 0;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  height: 48px;
+  border: $border-width solid transparent;
+  border-radius: $radius-md;
   font: inherit;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
 
   &:disabled {
@@ -87,8 +89,8 @@ watch(
 }
 
 .button-outline {
-  border-color: #e5e5e5;
-  background-color: #fff;
+  border-color: $line-color;
+  background-color: $surface-color;
   color: $text-color;
 }
 

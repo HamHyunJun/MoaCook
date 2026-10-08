@@ -74,7 +74,7 @@ useHead({ title: '관리자 로그인 | MoaCook' })
 .login-page {
   display: flex;
   justify-content: center;
-  padding: 64px 20px;
+  padding: 72px 20px;
 }
 
 .login-card {
@@ -82,11 +82,11 @@ useHead({ title: '관리자 로그인 | MoaCook' })
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  max-width: 400px;
-  padding: 32px 28px;
+  max-width: 420px;
+  padding: 36px 32px;
+  border: $border-width solid $line-color;
   border-radius: $radius-lg;
   background-color: $surface-color;
-  box-shadow: $shadow-md;
   text-align: left;
 }
 
@@ -120,19 +120,20 @@ useHead({ title: '관리자 로그인 | MoaCook' })
 
 .label {
   font-size: $font-size-small;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .input {
   height: 46px;
   padding: 0 14px;
-  border: 1px solid $line-color;
+  border: $border-width solid $line-color;
   border-radius: $radius-md;
   outline: none;
   font-size: $font-size-body;
+  transition: border-color 0.15s ease;
 
   &:focus {
-    border-color: $point-color;
+    border-color: $text-color;
   }
 }
 
@@ -146,11 +147,15 @@ useHead({ title: '관리자 로그인 | MoaCook' })
   height: 48px;
   border: none;
   border-radius: $radius-md;
-  background-color: $text-color;
+  background-color: $point-color;
   color: #fff;
   font-size: $font-size-body;
   font-weight: 700;
   cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: $point-strong-color;
+  }
 
   &:disabled {
     opacity: 0.5;

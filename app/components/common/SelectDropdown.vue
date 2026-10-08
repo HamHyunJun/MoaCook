@@ -181,18 +181,19 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   gap: 10px;
   width: 100%;
   min-width: 140px;
-  padding: 9px 14px 9px 16px;
-  border: 1px solid $line-color;
+  height: 40px;
+  padding: 0 14px 0 16px;
+  border: $border-width solid $line-color;
   border-radius: 999px;
   background-color: $surface-color;
   color: $text-color;
   font-size: $font-size-small;
-  font-weight: 600;
+  font-weight: 650;
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
   &:hover {
-    border-color: #D9DCE2;
+    border-color: $line-strong-color;
   }
 
   &:focus-visible {
@@ -205,8 +206,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   }
 
   .selected & {
-    border-color: $point-color;
-    background-color: $point-soft-color;
+    border-color: $text-color;
   }
 }
 
@@ -219,8 +219,8 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   width: 16px;
   height: 16px;
   fill: none;
-  stroke: $sub-text-color;
-  stroke-width: 2.5;
+  stroke: $text-color;
+  stroke-width: 2.25;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: transform 0.2s ease;
@@ -239,7 +239,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   margin: 0;
   padding: 6px;
   border: 1px solid $line-color;
-  border-radius: $radius-md + 2px;
+  border-radius: $radius-md;
   outline: none;
   background-color: $surface-color;
   box-shadow: $shadow-md;
@@ -261,7 +261,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   cursor: pointer;
 
   &.active {
-    background-color: #F4F5F7;
+    background-color: $fill-color;
   }
 
   &.checked {
@@ -273,7 +273,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   width: 16px;
   height: 16px;
   fill: none;
-  stroke: $point-strong-color;
+  stroke: $point-color;
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
