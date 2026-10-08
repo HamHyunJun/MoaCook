@@ -2,14 +2,16 @@
   <header class="header">
     <div class="header-inner">
       <NuxtLink to="/" class="logo" aria-label="MoaCook 홈">
-        <img src="~/assets/images/MoaCook2.png" alt="MoaCook" class="logo-image">
+        <AppLogo />
       </NuxtLink>
 
       <form class="search-form" role="search" @submit.prevent="search">
-        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-3.5-3.5" />
-        </svg>
+        <button type="submit" class="search-button" aria-label="검색">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+        </button>
         <input
           v-model="keyword"
           type="search"
@@ -18,7 +20,6 @@
           aria-label="레시피 검색"
           maxlength="100"
         >
-        <button type="submit" class="search-button">검색</button>
       </form>
     </div>
   </header>
@@ -53,30 +54,30 @@ function search(): void {
   z-index: 10;
   padding-top: env(safe-area-inset-top);
   border-bottom: 1px solid $line-color;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: saturate(180%) blur(12px);
 }
 
 .header-inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: 40px;
   max-width: $content-max-width;
-  height: 72px;
+  height: 68px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .logo {
   flex-shrink: 0;
-  display: block;
-}
+  font-size: 1.375rem;
+  text-decoration: none;
 
-.logo-image {
-  display: block;
-  width: 96px;
-  height: auto;
+  &:focus-visible {
+    border-radius: $radius-sm;
+    outline: 2px solid $point-color;
+    outline-offset: 4px;
+  }
 }
 
 .search-form {
@@ -84,40 +85,58 @@ function search(): void {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
+  margin-left: auto;
+}
+
+.search-button {
+  position: absolute;
+  left: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+
+  &:hover .search-icon {
+    stroke: $text-color;
+  }
 }
 
 .search-icon {
-  position: absolute;
-  left: 16px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: $sub-text-color;
-  stroke-width: 2;
+  stroke-width: 2.25;
   stroke-linecap: round;
-  pointer-events: none;
+  transition: stroke 0.15s ease;
 }
 
 .search-input {
   width: 100%;
   height: 44px;
-  padding: 0 72px 0 44px;
-  border: 1px solid transparent;
+  padding: 0 18px 0 42px;
+  border: $border-width solid transparent;
   border-radius: 999px;
   outline: none;
-  background-color: #F2F3F5;
+  background-color: $fill-color;
   color: $text-color;
-  font-size: 0.9375rem;
+  font-size: $font-size-small;
   font-weight: 500;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 
   &::placeholder {
-    color: $sub-text-color;
+    color: $muted-text-color;
   }
 
   &:focus {
-    border-color: $point-color;
+    border-color: $text-color;
     background-color: $surface-color;
   }
 
@@ -126,43 +145,23 @@ function search(): void {
   }
 }
 
-.search-button {
-  position: absolute;
-  right: 5px;
-  height: 34px;
-  padding: 0 16px;
-  border: none;
-  border-radius: 999px;
-  background-color: $point-color;
-  color: $text-color;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $point-strong-color;
-  }
-}
-
 @media (max-width: $mobile-max-width) {
   .header-inner {
-    gap: 12px;
-    height: 64px;
+    gap: 14px;
+    height: 60px;
     padding: 0 16px;
   }
 
-  .logo-image {
-    width: 72px;
+  .logo {
+    font-size: 1.125rem;
+  }
+
+  .search-form {
+    max-width: none;
   }
 
   .search-input {
     height: 40px;
-    font-size: 0.9rem;
-  }
-
-  .search-button {
-    height: 30px;
-    padding: 0 12px;
   }
 }
 </style>

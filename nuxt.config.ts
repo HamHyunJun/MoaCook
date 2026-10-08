@@ -9,8 +9,18 @@ export default defineNuxtConfig({
       // 앱(웹뷰)에서 노치/상태 표시줄 영역까지 화면을 채우고 safe-area 여백으로 피한다
       viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
       title: 'MoaCook',
+      meta: [
+        { name: 'theme-color', content: '#ffffff' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-title', content: 'MoaCook' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+      ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        // 휴대폰에서 '홈 화면에 추가'하면 앱처럼 열리도록 하는 설정
+        { rel: 'manifest', href: '/manifest.webmanifest' },
         // 본문 글꼴 Pretendard (public/fonts, 화면에 쓰인 글자 묶음만 내려받는 방식)
         { rel: 'stylesheet', href: '/fonts/pretendard/pretendardvariable-dynamic-subset.css' },
       ],

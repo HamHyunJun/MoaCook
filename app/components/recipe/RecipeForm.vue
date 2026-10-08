@@ -80,7 +80,7 @@
       <h2 class="section-title">조리 과정</h2>
       <ol class="rows">
         <li v-for="(step, index) in form.steps" :key="step.key" class="row step-row">
-          <span class="step-number">{{ String(index + 1).padStart(2, '0') }}</span>
+          <span class="step-number">{{ index + 1 }}</span>
           <textarea v-model="step.description" rows="3" maxlength="2000" :aria-label="`${index + 1}번째 조리 과정`" placeholder="조리 과정을 입력해 주세요." required />
           <div class="step-actions">
             <button type="button" class="icon-button" :disabled="index === 0" :aria-label="`${index + 1}번째 과정 위로`" @click="moveRow(form.steps, index, -1)">↑</button>
@@ -292,42 +292,46 @@ function onSubmit(): void {
 .recipe-form {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
 }
 
+// 입력 묶음마다 테두리 상자로 나눠 한눈에 구역이 보이게 한다
 .section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
+  padding: 24px;
+  border: $border-width solid $line-color;
+  border-radius: $radius-lg;
+  background-color: $surface-color;
 }
 
 .section-title {
   margin: 0;
-  padding-left: 10px;
-  border-left: 4px solid $point-color;
-  font-size: 1.2rem;
+  font-size: 1.1875rem;
+  font-weight: 800;
 }
 
 .field {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 }
 
 .field-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
+  gap: 18px;
 }
 
 .label {
-  font-size: 0.9rem;
-  font-weight: bold;
+  font-size: $font-size-small;
+  font-weight: 700;
 
   em {
-    color: $error-color;
+    color: $point-color;
     font-style: normal;
   }
 }
@@ -338,27 +342,51 @@ select,
 textarea {
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 12px;
-  border: 1px solid $line-color;
-  border-radius: 8px;
-  background-color: #fff;
+  min-height: 48px;
+  padding: 11px 14px;
+  border: $border-width solid $line-color;
+  border-radius: $radius-md;
+  background-color: $surface-color;
+  color: $text-color;
   font: inherit;
   font-size: 1rem;
+  font-weight: 500;
+  transition: border-color 0.15s ease;
+
+  &::placeholder {
+    color: $muted-text-color;
+  }
+
+  &:hover {
+    border-color: $line-strong-color;
+  }
 
   &:focus {
-    border-color: $point-color;
+    border-color: $text-color;
     outline: none;
   }
 }
 
+// 기본 화살표 대신 다른 화면과 같은 꺾쇠를 쓴다
+select {
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316181D' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 14px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  appearance: none;
+  cursor: pointer;
+}
+
 textarea {
+  line-height: 1.6;
   resize: vertical;
 }
 
 .image-field {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 16px;
 }
 
 .image-preview {
@@ -367,12 +395,12 @@ textarea {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  width: 160px;
-  border-radius: 8px;
-  background-color: #f5f5f5;
+  width: 180px;
+  border-radius: $radius-md;
+  background-color: $fill-color;
   aspect-ratio: 4 / 3;
   color: $sub-text-color;
-  font-size: 0.85rem;
+  font-size: $font-size-caption;
 
   img {
     width: 100%;
@@ -385,7 +413,7 @@ textarea {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   min-width: 200px;
 }
 
@@ -404,7 +432,7 @@ textarea {
 .hint {
   margin: 0;
   color: $sub-text-color;
-  font-size: 0.8rem;
+  font-size: $font-size-caption;
 }
 
 .rows {
@@ -427,11 +455,17 @@ textarea {
 }
 
 .step-number {
+  display: flex;
   flex-shrink: 0;
-  width: 2rem;
-  padding-top: 8px;
-  color: $point-color;
-  font-size: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin-top: 9px;
+  border-radius: 50%;
+  background-color: $point-color;
+  color: #fff;
+  font-size: $font-size-caption;
   font-weight: 800;
 }
 
@@ -445,14 +479,16 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 18px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  height: 48px;
+  padding: 0 22px;
+  border: $border-width solid transparent;
+  border-radius: $radius-md;
   font: inherit;
-  font-size: 0.95rem;
-  font-weight: bold;
+  font-size: $font-size-small;
+  font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 
   &:disabled {
     opacity: 0.5;
@@ -463,41 +499,70 @@ textarea {
 .button-primary {
   background-color: $point-color;
   color: #fff;
+
+  &:hover:not(:disabled) {
+    background-color: $point-strong-color;
+  }
 }
 
 .button-outline {
   border-color: $line-color;
-  background-color: #fff;
+  background-color: $surface-color;
   color: $text-color;
+
+  &:hover:not(:disabled) {
+    border-color: $text-color;
+  }
 }
 
 .add-button {
   align-self: flex-start;
+  height: 42px;
+  padding: 0 16px;
+  border-style: dashed;
+  border-color: $line-strong-color;
 }
 
 .icon-button {
+  display: flex;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border: 1px solid $line-color;
-  border-radius: 8px;
-  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 4px;
+  border: $border-width solid $line-color;
+  border-radius: 10px;
+  background-color: $surface-color;
   color: $sub-text-color;
+  font-weight: 700;
   cursor: pointer;
 
+  &:hover:not(:disabled) {
+    border-color: $text-color;
+    color: $text-color;
+  }
+
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 }
 
+.step-actions .icon-button {
+  width: 36px;
+  height: 32px;
+  margin-top: 0;
+}
+
 .errors {
   margin: 0;
-  padding: 12px 16px 12px 32px;
-  border-radius: 8px;
-  background-color: #fdecea;
+  padding: 14px 18px 14px 36px;
+  border-radius: $radius-md;
+  background-color: #FEF1F0;
   color: $error-color;
-  font-size: 0.9rem;
+  font-size: $font-size-small;
+  font-weight: 500;
   line-height: 1.6;
 }
 
@@ -507,9 +572,19 @@ textarea {
   gap: 10px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $tablet-max-width) {
   .field-row {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: $mobile-max-width) {
+  .section {
+    padding: 20px 16px;
+  }
+
+  .actions .button {
+    flex: 1;
   }
 }
 </style>

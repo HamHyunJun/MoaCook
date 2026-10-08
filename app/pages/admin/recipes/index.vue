@@ -1,8 +1,8 @@
 <template>
   <div class="admin-page">
     <div class="header">
-      <h1 class="title">레시피 관리</h1>
-      <NuxtLink to="/admin/recipes/new" class="new-button">+ 새 레시피 등록</NuxtLink>
+      <h1 class="title">레시피 관리 <span class="count">{{ recipes?.length ?? 0 }}</span></h1>
+      <NuxtLink to="/admin/recipes/new" class="new-button">레시피 등록</NuxtLink>
     </div>
 
     <p v-if="error" class="message">레시피를 불러오지 못했습니다.</p>
@@ -72,31 +72,44 @@ useHead({ title: '레시피 관리 | MoaCook' })
 
 @use '~/assets/scss/admin';
 
-
 .header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 
   .title {
     margin: 0;
   }
 }
 
+.count {
+  color: $point-color;
+}
+
 .new-button {
-  padding: 10px 16px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
   background-color: $point-color;
   color: #fff;
-  font-weight: bold;
+  font-size: $font-size-small;
+  font-weight: 700;
   text-decoration: none;
+
+  &:hover {
+    background-color: $point-strong-color;
+  }
 }
 
 .message {
-  padding: 48px 0;
+  padding: 64px 0;
+  border-radius: $radius-lg;
+  background-color: $fill-color;
   color: $sub-text-color;
   text-align: center;
 }
@@ -104,22 +117,24 @@ useHead({ title: '레시피 관리 | MoaCook' })
 .recipe-list {
   margin: 0;
   padding: 0;
+  border-top: 2px solid $text-color;
   list-style: none;
 }
 
 .recipe-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 0;
+  gap: 16px;
+  padding: 14px 0;
   border-bottom: 1px solid $line-color;
 }
 
 .thumbnail {
   flex-shrink: 0;
-  width: 72px;
-  height: 54px;
-  border-radius: 6px;
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-md;
+  background-color: $fill-color;
   object-fit: cover;
 }
 
@@ -134,19 +149,21 @@ useHead({ title: '레시피 관리 | MoaCook' })
 .name {
   overflow: hidden;
   color: $text-color;
-  font-weight: bold;
+  font-size: 1.0625rem;
+  font-weight: 700;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   &:hover {
-    color: $point-color;
+    color: $point-strong-color;
   }
 }
 
 .meta {
   color: $sub-text-color;
-  font-size: 0.85rem;
+  font-size: $font-size-caption;
+  font-weight: 500;
 }
 
 .item-actions {
@@ -156,24 +173,46 @@ useHead({ title: '레시피 관리 | MoaCook' })
 }
 
 .action {
-  padding: 8px 12px;
-  border: 1px solid $line-color;
-  border-radius: 8px;
-  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border: $border-width solid $line-color;
+  border-radius: 999px;
+  background-color: $surface-color;
   color: $text-color;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: $font-size-caption;
+  font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+
+  &:hover {
+    border-color: $text-color;
+  }
 }
 
 .action-danger {
-  border-color: #f5c2bd;
   color: $error-color;
+
+  &:hover {
+    border-color: $error-color;
+  }
 }
 
 .delete-error {
   margin-top: 16px;
   color: $error-color;
+}
+
+@media (max-width: $mobile-max-width) {
+  .thumbnail {
+    width: 52px;
+    height: 52px;
+  }
+
+  .name {
+    font-size: 1rem;
+  }
 }
 </style>

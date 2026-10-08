@@ -3,7 +3,7 @@ export const RECIPE_CATEGORIES = ['한식', '중식', '일식', '양식', '비�
 
 export type RecipeCategory = (typeof RECIPE_CATEGORIES)[number]
 
-/** 난이도: 1(쉬움) ~ 3(어려움), 화면에서는 ★로 표시 */
+/** 난이도: 1(쉬움) ~ 3(어려움), 화면에서는 쉬움·보통·어려움으로 표시 */
 export type RecipeDifficulty = 1 | 2 | 3
 
 export interface RecipeIngredient {

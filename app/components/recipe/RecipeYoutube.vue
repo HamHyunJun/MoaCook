@@ -74,23 +74,23 @@ function formatViewCount(count: number): string {
 }
 
 .search-link {
-  color: #c4302b;
-  font-size: 0.9rem;
-  font-weight: bold;
+  color: $sub-text-color;
+  font-size: $font-size-small;
+  font-weight: 650;
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    color: $text-color;
   }
 }
 
 .message {
   margin: 0;
-  padding: 20px;
+  padding: 28px 20px;
   border-radius: $radius-lg;
-  background-color: $surface-color;
-  box-shadow: $shadow-sm;
+  background-color: $fill-color;
   color: $sub-text-color;
+  font-weight: 500;
   text-align: center;
 }
 
@@ -116,7 +116,7 @@ function formatViewCount(count: number): string {
 .thumbnail-wrap {
   overflow: hidden;
   border-radius: $radius-md;
-  background-color: $line-color;
+  background-color: $fill-color;
   aspect-ratio: 16 / 9;
 }
 
@@ -129,9 +129,9 @@ function formatViewCount(count: number): string {
 .title {
   display: -webkit-box;
   overflow: hidden;
-  margin: 8px 0 4px;
-  font-size: 0.95rem;
-  font-weight: bold;
+  margin: 10px 0 4px;
+  font-size: $font-size-small;
+  font-weight: 700;
   line-height: 1.4;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -140,10 +140,10 @@ function formatViewCount(count: number): string {
 .meta {
   margin: 0;
   color: $sub-text-color;
-  font-size: 0.8rem;
+  font-size: $font-size-caption;
 }
 
-@media (max-width: 600px) {
+@media (max-width: $mobile-max-width) {
   .video-grid {
     grid-template-columns: 1fr 1fr;
     gap: 12px;

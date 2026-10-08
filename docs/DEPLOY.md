@@ -72,12 +72,43 @@ pnpm android   # Android Studio가 열리면 ▶ Run
 pnpm ios       # Xcode가 열리면 Signing에서 Team 선택 후 ▶ Run
 ```
 
+### 안드로이드 APK 받기 (직접 설치)
+
+`mobile/` 쪽이 바뀌어 main에 올라가면 GitHub Actions의 **Android APK** 워크플로가 APK를 만들어
+저장소 **Releases > android-latest**에 `MoaCook.apk`로 올립니다. Actions 탭에서 **Run workflow**로 직접 실행할 수도 있습니다.
+
+1. 폰 브라우저에서 GitHub에 로그인하고 저장소 Releases의 `MoaCook.apk`를 내려받습니다.
+2. 파일을 열면 "출처를 알 수 없는 앱" 설치 허용을 묻습니다. 허용하고 설치합니다.
+
+서명 키 secret이 없으면 빌드마다 다른 디버그 키로 서명되므로, 새 APK를 설치할 때 기존 앱을 먼저 지워야 할 수 있습니다.
+같은 키로 계속 덮어 설치하려면 저장소 **Settings > Secrets and variables > Actions**에 아래 4개를 넣습니다.
+
+| 이름 | 값 |
+| --- | --- |
+| `ANDROID_KEYSTORE_BASE64` | `keytool`로 만든 `.jks` 파일을 `base64`로 바꾼 문자열 |
+| `ANDROID_KEYSTORE_PASSWORD` | 키스토어 비밀번호 |
+| `ANDROID_KEY_ALIAS` | 키 별칭 |
+| `ANDROID_KEY_PASSWORD` | 키 비밀번호 |
+
+```bash
+keytool -genkeypair -keystore moacook.jks -alias moacook -keyalg RSA -keysize 2048 -validity 10000
+base64 -w0 moacook.jks   # macOS는 base64 -i moacook.jks
+```
+
+키 파일과 비밀번호는 잃어버리면 같은 앱으로 업데이트할 수 없으니 안전한 곳에 따로 보관하세요.
+
+### 아이폰에서 쓰기
+
+아이폰은 APK 같은 직접 설치 파일이 없습니다. 두 가지 방법이 있습니다.
+
+- **홈 화면에 추가 (바로 가능):** 사파리로 사이트를 열고 공유 버튼 > **홈 화면에 추가**를 누르면 MoaCook 아이콘이 생기고 앱처럼 전체 화면으로 열립니다.
+- **앱으로 설치:** Mac + Xcode에서 `pnpm ios`로 열어 직접 설치하거나(무료 계정은 7일마다 다시 설치), Apple Developer Program(연 $99) 가입 후 TestFlight나 App Store로 배포합니다.
+
 ### 스토어 배포
 
 - 안드로이드: Android Studio **Build > Generate Signed App Bundle**로 `.aab`를 만들어 Google Play Console에 올립니다.
 - 아이폰: Xcode **Product > Archive** 후 App Store Connect로 업로드합니다.
 - 앱 ID는 `com.moacook.app`입니다. 바꾸려면 `capacitor.config.ts`의 `appId`와 각 플랫폼 설정을 함께 바꿉니다.
-- 지금 앱 아이콘과 스플래시는 Capacitor 기본 이미지입니다. 스토어에 내기 전에 교체해야 합니다.
 
 ## 로컬 개발
 

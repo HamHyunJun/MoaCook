@@ -1,10 +1,15 @@
 <template>
   <div class="recipe-list-page">
     <section class="intro">
-      <NuxtLink v-if="isAdmin" to="/admin/recipes/new" class="new-link">+ 레시피 등록</NuxtLink>
-      <p class="eyebrow">{{ searchQuery.q ? '검색' : 'MoaCook 레시피' }}</p>
-      <h1 class="title">{{ title }}</h1>
-      <p v-if="!searchQuery.q" class="subtitle">집에서 따라 하기 쉬운 레시피를 모았어요.</p>
+      <div>
+        <p class="eyebrow">{{ searchQuery.q ? '검색 결과' : 'MoaCook 레시피' }}</p>
+        <h1 class="title">{{ title }}</h1>
+        <p v-if="!searchQuery.q" class="subtitle">집에서 따라 하기 쉬운 레시피를 모았어요.</p>
+      </div>
+      <NuxtLink v-if="isAdmin" to="/admin/recipes/new" class="new-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+        레시피 등록
+      </NuxtLink>
     </section>
 
     <div class="filters">
@@ -51,9 +56,9 @@
       </div>
     </div>
 
-    <div v-if="searchQuery.q || hasFilter" class="result-bar">
-      <span><strong>{{ recipes?.length ?? 0 }}</strong>개의 레시피</span>
-      <button type="button" class="reset-button" @click="resetQuery">조건 초기화</button>
+    <div class="result-bar">
+      <span>레시피 <strong>{{ recipes?.length ?? 0 }}</strong>개</span>
+      <button v-if="searchQuery.q || hasFilter" type="button" class="reset-button" @click="resetQuery">조건 초기화</button>
     </div>
 
     <p v-if="error" class="message">레시피를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
@@ -141,55 +146,65 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 .recipe-list-page {
   max-width: $content-max-width;
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 48px 24px 40px;
   text-align: left;
 }
 
 .intro {
-  position: relative;
-  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 32px;
 }
 
 .new-link {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px 18px;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 20px 0 16px;
   border-radius: 999px;
-  background-color: $text-color;
+  background-color: $point-color;
   color: #fff;
   font-size: $font-size-small;
   font-weight: 700;
   text-decoration: none;
+  transition: background-color 0.15s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
 
   &:hover {
-    background-color: #000;
+    background-color: $point-strong-color;
   }
 }
 
 .eyebrow {
-  display: inline-block;
-  margin: 0 0 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background-color: $point-soft-color;
-  color: $point-strong-color;
-  font-size: $font-size-caption;
-  font-weight: 700;
-  letter-spacing: 0;
+  margin: 0 0 8px;
+  color: $point-color;
+  font-size: $font-size-small;
+  font-weight: 750;
 }
 
 .title {
   margin: 0;
   font-size: $font-size-display;
-  font-weight: 820;
+  font-weight: 800;
   letter-spacing: $tracking-tight;
-  line-height: 1.2;
+  line-height: 1.25;
   word-break: break-all;
 }
 
 .subtitle {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: $sub-text-color;
   font-size: 1.0625rem;
   font-weight: 500;
@@ -201,7 +216,8 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $line-color;
 }
 
 .category-chips {
@@ -214,24 +230,30 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 
 .chip {
   flex-shrink: 0;
-  padding: 9px 18px;
-  border: 1px solid $line-color;
+  height: 40px;
+  padding: 0 18px;
+  border: $border-width solid $line-color;
   border-radius: 999px;
   background-color: $surface-color;
   color: $text-color;
   font-size: $font-size-small;
-  font-weight: 600;
+  font-weight: 650;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 
   &:hover {
-    border-color: $point-color;
+    border-color: $line-strong-color;
   }
 
   &.active {
     border-color: $text-color;
     background-color: $text-color;
     color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $point-color;
+    outline-offset: 2px;
   }
 }
 
@@ -244,12 +266,14 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin: 20px 0;
   color: $sub-text-color;
-  font-size: 0.9rem;
+  font-size: $font-size-small;
+  font-weight: 500;
 
   strong {
     color: $text-color;
+    font-weight: 750;
   }
 }
 
@@ -258,7 +282,8 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
   border: none;
   background: none;
   color: $sub-text-color;
-  font-size: 0.9rem;
+  font-size: $font-size-small;
+  font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -269,17 +294,18 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 }
 
 .message {
-  padding: 64px 0;
+  padding: 80px 0;
   border-radius: $radius-lg;
-  background-color: $surface-color;
+  background-color: $fill-color;
   color: $sub-text-color;
+  font-weight: 500;
   text-align: center;
 }
 
 .recipe-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 28px 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 40px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -287,15 +313,25 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
 
 @media (max-width: $mobile-max-width) {
   .recipe-list-page {
-    padding: 24px 16px 64px;
+    padding: 28px 16px 32px;
+  }
+
+  .intro {
+    margin-bottom: 24px;
+  }
+
+  .new-link {
+    height: 40px;
+    padding: 0 14px 0 12px;
+    font-size: $font-size-caption;
   }
 
   .title {
-    font-size: 1.875rem;
+    font-size: 1.75rem;
   }
 
   .subtitle {
-    font-size: 1rem;
+    font-size: $font-size-small;
   }
 
   // 줄바꿈을 끄지 않으면 세로 배치에서 칩 줄 길이만큼 너비가 늘어난다
@@ -311,12 +347,19 @@ useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${t
     padding: 0 16px;
   }
 
+  .chip {
+    height: 38px;
+    padding: 0 16px;
+  }
+
   .select {
     flex: 1;
   }
 
+  // 모바일은 2열로 촘촘하게 보여 줘야 한눈에 들어온다
   .recipe-grid {
-    gap: 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 12px;
   }
 }
 </style>

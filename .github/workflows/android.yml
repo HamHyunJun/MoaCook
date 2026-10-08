@@ -1,0 +1,96 @@
+# 안드로이드 APK 빌드
+# main에 앱 관련 변경이 올라가거나 Actions 탭에서 직접 실행하면 서명된 APK를 만들어
+# "android-latest" 릴리스에 올린다. 폰에서 그 릴리스 페이지를 열어 내려받아 설치하면 된다.
+name: Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, rebrand]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/android.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: mobile/package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: mobile/pnpm-lock.yaml
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: Capacitor 설정을 안드로이드 프로젝트에 반영
+        run: pnpm exec cap sync android
+
+      # 서명 키 secret(ANDROID_KEYSTORE_BASE64 등)이 있으면 그 키로 서명한 release APK를,
+      # 없으면 디버그 키로 서명한 APK를 만든다. 둘 다 폰에 바로 설치할 수 있다.
+      - name: 서명 키 준비
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/moacook.jks"
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/moacook.jks" >> "$GITHUB_ENV"
+            echo "BUILD_TYPE=release" >> "$GITHUB_ENV"
+          else
+            echo "::warning::서명 키 secret이 없어 디버그 키로 서명합니다. 새 버전을 설치하려면 기존 앱을 지워야 할 수 있습니다."
+            echo "BUILD_TYPE=debug" >> "$GITHUB_ENV"
+          fi
+
+      - name: APK 빌드
+        working-directory: mobile/android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          TASK=assemble${BUILD_TYPE^}
+          ./gradlew "$TASK" --no-daemon \
+            -PversionCode=${{ github.run_number }} \
+            -PversionName=1.0.${{ github.run_number }}
+          cp "app/build/outputs/apk/$BUILD_TYPE/app-$BUILD_TYPE.apk" "$RUNNER_TEMP/MoaCook.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MoaCook-apk
+          path: ${{ runner.temp }}/MoaCook.apk
+
+      - name: 릴리스에 APK 올리기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="빌드 ${{ github.run_number }} (${GITHUB_SHA::7}). 안드로이드 폰에서 MoaCook.apk를 내려받아 설치하세요."
+          if gh release view android-latest >/dev/null 2>&1; then
+            gh release upload android-latest "$RUNNER_TEMP/MoaCook.apk" --clobber
+            gh release edit android-latest --notes "$NOTES"
+          else
+            gh release create android-latest "$RUNNER_TEMP/MoaCook.apk" \
+              --title "MoaCook 안드로이드 앱" --notes "$NOTES" --target "$GITHUB_SHA"
+          fi
