@@ -5,7 +5,7 @@
  */
 
 /** 초기 데이터 버전: 레시피를 추가하면 올리고, 추가한 레시피의 since에 같은 값을 적는다 */
-export const SEED_VERSION = 3
+export const SEED_VERSION = 4
 
 type IngredientSeed = [name: string, amount: string]
 
@@ -744,7 +744,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '삼겹살 구이',
     image: unsplash('photo-1548150914-c9f19106dbf6'),
     description: '숯불이나 그리들에 노릇하게 구워 먹는 캠핑 대표 메뉴 삼겹살 구이',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 30,
     ingredients: [
@@ -772,7 +772,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '부대찌개',
     image: unsplash('photo-1584509171119-9054d2d7d9a7'),
     description: '햄과 소시지, 라면사리를 듬뿍 넣어 코펠에 끓이는 얼큰한 부대찌개',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 25,
     ingredients: [
@@ -802,7 +802,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '소시지 야채볶음',
     image: unsplash('photo-1698843813577-db28459556b0'),
     description: '달콤짭짤한 소스에 볶아낸 캠핑 술안주 겸 반찬, 소시지 야채볶음',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -830,7 +830,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '닭꼬치',
     image: unsplash('photo-1705359573325-f2006d5e459f'),
     description: '숯불에 구워 달콤한 데리야끼 소스를 바른 쫄깃한 닭꼬치',
-    category: '캠핑',
+    category: '한식',
     difficulty: 2,
     cookingTime: 40,
     ingredients: [
@@ -860,7 +860,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '호일 감자구이',
     image: unsplash('photo-1639922414789-74610d7385ea'),
     description: '호일에 싸서 숯불 속에 묻어 포슬포슬하게 익힌 버터 감자구이',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 50,
     ingredients: [
@@ -886,7 +886,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '스모어',
     image: unsplash('photo-1510673209043-af92bcbee205'),
     description: '모닥불에 구운 마시멜로와 초콜릿을 크래커에 끼운 캠핑 디저트',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [
@@ -910,7 +910,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '감바스 알 아히요',
     image: unsplash('photo-1625943553852-781c6dd46faa'),
     description: '올리브유에 마늘과 새우를 끓여 바게트에 찍어 먹는 캠핑 인기 메뉴',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -938,7 +938,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '목살 스테이크',
     image: unsplash('photo-1432139555190-58524dae6a55'),
     description: '두툼한 목살을 그리들에 구워 육즙 가득한 캠핑 스테이크',
-    category: '캠핑',
+    category: '양식',
     difficulty: 2,
     cookingTime: 30,
     ingredients: [
@@ -966,7 +966,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '콘치즈',
     image: unsplash('photo-1701326786998-3688beceadda'),
     description: '옥수수와 마요네즈, 모짜렐라를 스킬렛에 녹인 고소한 콘치즈',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -992,7 +992,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '버터 옥수수구이',
     image: unsplash('photo-1653886764100-60e01f57bd1d'),
     description: '숯불에 구워 버터와 설탕을 발라 고소하고 달콤한 옥수수구이',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 25,
     ingredients: [
@@ -1016,7 +1016,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '어묵탕',
     image: unsplash('photo-1763705859380-27dc4be72013'),
     description: '쌀쌀한 캠핑 밤에 딱 좋은 시원하고 따끈한 꼬치 어묵탕',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 30,
     ingredients: [
@@ -1045,7 +1045,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '밀푀유나베',
     image: unsplash('photo-1648977555545-4dd006e30d3f'),
     description: '배추와 깻잎, 소고기를 겹겹이 쌓아 끓이는 보기 좋은 캠핑 전골',
-    category: '캠핑',
+    category: '일식',
     difficulty: 2,
     cookingTime: 35,
     ingredients: [
@@ -1073,7 +1073,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '짜파구리',
     image: unsplash('photo-1564947310108-cdfbe8834f0b'),
     description: '짜장라면과 매운 라면을 섞어 끓인 캠핑 별미 짜파구리',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1099,7 +1099,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '삼겹살 볶음밥',
     image: unsplash('photo-1680461659647-8c0501b1f7c6'),
     description: '고기 굽고 남은 기름에 김치와 밥을 볶아낸 캠핑 마무리 볶음밥',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1127,7 +1127,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '캠핑 핫샌드위치',
     image: unsplash('photo-1767320235647-8b40bfdc25ca'),
     description: '핫샌드메이커로 바삭하게 구워 치즈가 쭉 늘어나는 캠핑 아침 메뉴',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1154,7 +1154,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '새우 버터구이',
     image: unsplash('photo-1633504581786-316c8002b1b9'),
     description: '통새우를 버터와 마늘에 구워 고소한 향이 가득한 캠핑 요리',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -1181,7 +1181,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '철판 닭갈비',
     image: unsplash('photo-1752826892253-d89531507b1d'),
     description: '넓은 철판에 양념 닭고기와 채소를 볶아 먹는 매콤한 닭갈비',
-    category: '캠핑',
+    category: '한식',
     difficulty: 2,
     cookingTime: 40,
     ingredients: [
@@ -1213,7 +1213,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '호일 군고구마',
     image: unsplash('photo-1730815048561-45df6f7f331d'),
     description: '호일에 싸서 숯불 속에서 천천히 익힌 달콤한 군고구마',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 50,
     ingredients: [
@@ -1237,7 +1237,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '뱅쇼',
     image: unsplash('photo-1512589848202-673dfdab1972'),
     description: '와인에 과일과 향신료를 넣어 끓인 따뜻한 캠핑 겨울 음료',
-    category: '캠핑',
+    category: '양식',
     difficulty: 1,
     cookingTime: 30,
     ingredients: [
@@ -1264,7 +1264,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '떡꼬치',
     image: unsplash('photo-1750548006629-16f691ff97f6'),
     description: '노릇하게 구운 떡에 달콤 매콤한 양념을 바른 추억의 떡꼬치',
-    category: '캠핑',
+    category: '한식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -1293,7 +1293,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '간장계란밥',
     image: unsplash('photo-1600688654899-379ec76aca42'),
     description: '밥, 계란, 간장만 있으면 5분 만에 완성되는 자취 필살기',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 5,
     ingredients: [
@@ -1319,7 +1319,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '참치마요덮밥',
     image: unsplash('photo-1608039733145-603c07cad096'),
     description: '참치캔 하나로 뚝딱 만드는 고소한 참치마요덮밥',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [
@@ -1347,7 +1347,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '스팸마요덮밥',
     image: unsplash('photo-1770966666358-e9f8c4f37daf'),
     description: '노릇하게 구운 스팸에 마요네즈를 더한 든든한 한 그릇',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1375,7 +1375,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '치킨마요덮밥',
     image: unsplash('photo-1788090485545-26c4d90f9c9f'),
     description: '남은 치킨이나 순살치킨으로 만드는 달콤 짭짤한 치킨마요',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1403,7 +1403,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '김치볶음밥',
     image: unsplash('photo-1564834730442-15e1985f2710'),
     description: '신김치와 찬밥만 있으면 실패 없는 자취생 국민 메뉴',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1432,7 +1432,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '치즈라면',
     image: unsplash('photo-1731007530051-42866cac7e80'),
     description: '매콤한 라면 위에 슬라이스 치즈를 올려 부드럽게 즐기는 야식',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 7,
     ingredients: [
@@ -1456,7 +1456,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '길거리 토스트',
     image: unsplash('photo-1709689155464-90d6ca1e9f62'),
     description: '양배추 달걀부침에 설탕과 케첩을 더한 추억의 길거리 토스트',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1486,7 +1486,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '알리오 올리오',
     image: unsplash('photo-1726596159143-15a840d03d3e'),
     description: '마늘과 올리브유만으로 완성하는 간단하고 향긋한 파스타',
-    category: '자취',
+    category: '양식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -1515,7 +1515,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '전자레인지 계란찜',
     image: unsplash('photo-1584278858536-52532423b9ea'),
     description: '불 없이 전자레인지로 3분이면 완성되는 폭신한 계란찜',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 7,
     ingredients: [
@@ -1541,7 +1541,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '참치김치찌개',
     image: unsplash('photo-1583032353423-04fd96ef221c'),
     description: '고기 없이 참치캔으로 깊은 맛을 내는 간편 김치찌개',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -1570,7 +1570,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '어묵볶음',
     image: unsplash('photo-1790317776552-c0d42f8ee8ca'),
     description: '사각어묵으로 10분 만에 만드는 달짝지근한 밥반찬',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [
@@ -1600,7 +1600,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '오므라이스',
     image: unsplash('photo-1677137261161-0095c10418ef'),
     description: '케첩 볶음밥을 부드러운 달걀로 감싼 추억의 오므라이스',
-    category: '자취',
+    category: '일식',
     difficulty: 2,
     cookingTime: 20,
     ingredients: [
@@ -1630,7 +1630,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '크림 우동',
     image: unsplash('photo-1611280422374-fa3c1110c16e'),
     description: '우유와 치즈로 만드는 꾸덕하고 고소한 크림 우동',
-    category: '자취',
+    category: '양식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1659,7 +1659,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '마약 계란장',
     image: unsplash('photo-1576343123473-0e7d3a34c5da'),
     description: '반숙 달걀을 달달한 간장 양념에 재운 중독성 있는 밥도둑',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 20,
     ingredients: [
@@ -1688,7 +1688,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '김치전',
     image: unsplash('photo-1616627077891-a4780e730b7e'),
     description: '신김치와 부침가루로 바삭하게 부쳐 내는 비 오는 날 메뉴',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1716,7 +1716,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '비빔국수',
     image: unsplash('photo-1697261998662-07476824031b'),
     description: '새콤달콤 매콤한 양념에 쫄깃한 소면을 비벼 먹는 한 그릇',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1745,7 +1745,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '토마토 달걀볶음',
     image: unsplash('photo-1634843466433-98d3aa48767e'),
     description: '토마토와 달걀만으로 10분 만에 만드는 새콤 부드러운 볶음',
-    category: '자취',
+    category: '중식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [
@@ -1772,7 +1772,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '김치 볶음우동',
     image: unsplash('photo-1654340272134-0fb805ad260f'),
     description: '김치와 우동면을 매콤달콤하게 볶아 낸 든든한 한 끼',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 15,
     ingredients: [
@@ -1802,7 +1802,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '계란국',
     image: unsplash('photo-1652088079703-38f4a8d6b981'),
     description: '바쁜 아침에도 5분이면 끓이는 맑고 부드러운 계란국',
-    category: '자취',
+    category: '한식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [
@@ -1829,7 +1829,7 @@ const recipeSeeds: RecipeSeed[] = [
     name: '프렌치 토스트',
     image: unsplash('photo-1639108094328-2b94a49b1c2e'),
     description: '달걀물에 적신 식빵을 버터에 구운 달콤한 브런치',
-    category: '자취',
+    category: '양식',
     difficulty: 1,
     cookingTime: 10,
     ingredients: [

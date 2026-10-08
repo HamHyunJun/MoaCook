@@ -22,8 +22,11 @@ create index if not exists recipes_created_at_idx on public.recipes (created_at)
 
 -- 카테고리 목록 (카테고리를 추가하면 여기와 shared/types/recipe.ts를 함께 고치고 이 파일을 다시 실행한다)
 alter table public.recipes drop constraint if exists recipes_category_check;
+-- 목록에서 빠진 카테고리를 쓰던 레시피는 한식으로 옮긴다 (초기 레시피는 서버가 먼저 알맞은 카테고리로 옮겨 둔다)
+update public.recipes set category = '한식'
+  where category not in ('한식', '중식', '일식', '양식', '비건');
 alter table public.recipes add constraint recipes_category_check
-  check (category in ('한식', '중식', '일식', '양식', '비건', '캠핑', '자취'));
+  check (category in ('한식', '중식', '일식', '양식', '비건'));
 
 -- 앱 설정 (초기 레시피 데이터 버전 등)
 create table if not exists public.app_settings (
