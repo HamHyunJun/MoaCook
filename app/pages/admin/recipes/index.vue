@@ -24,11 +24,11 @@
     <p v-if="deleteError" class="delete-error" role="alert">{{ deleteError }}</p>
 
     <ConfirmDialog
-      :open="deleteTarget !== null"
+      :open="deleteTarget !== undefined"
       :message="`'${deleteTarget?.name ?? ''}' 레시피를 정말 삭제하시겠습니까?`"
       confirm-label="삭제"
       :loading="deleting"
-      @cancel="deleteTarget = null"
+      @cancel="deleteTarget = undefined"
       @confirm="onConfirmDelete"
     />
   </div>
@@ -41,7 +41,7 @@ const { deleteRecipe } = useRecipes()
 
 const { data: recipes, error, refresh } = await useFetch<RecipeSummary[]>('/api/recipes')
 
-const deleteTarget = ref<RecipeSummary | null>(null)
+const deleteTarget = ref<RecipeSummary>()
 const deleting = ref(false)
 const deleteError = ref('')
 
@@ -60,7 +60,7 @@ const onConfirmDelete = async (): Promise<void> => {
   }
   finally {
     deleting.value = false
-    deleteTarget.value = null
+    deleteTarget.value = undefined
   }
 }
 

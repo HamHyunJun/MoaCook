@@ -67,13 +67,16 @@ const emit = defineEmits<{
   'update:modelValue': [value: T | undefined]
 }>()
 
+const uid = useId()
+
 const root = ref<HTMLElement | null>(null)
 const trigger = ref<HTMLButtonElement | null>(null)
 const listbox = ref<HTMLUListElement | null>(null)
 const isOpen = ref<boolean>(false)
 const activeIndex = ref<number>(0)
 
-const uid = useId()
+onMounted(() => document.addEventListener('pointerdown', onDocumentPointerDown))
+onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPointerDown))
 
 // 맨 앞에 "전체"(선택 해제) 항목을 둔다
 const allOptions = computed<SelectOption<T | undefined>[]>(() => [
@@ -162,9 +165,6 @@ const onDocumentPointerDown = (event: PointerEvent): void => {
     close()
   }
 }
-
-onMounted(() => document.addEventListener('pointerdown', onDocumentPointerDown))
-onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPointerDown))
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,17 @@
+import type { Ref } from 'vue'
+
+interface UseRecipeList {
+  cache: Ref<Record<string, RecipeSummary[]>>
+  lastListPath: Ref<string>
+  findSummary: (id: string) => RecipeSummary | undefined
+}
+
 /**
  * 목록 화면 상태: 상세 화면에 다녀와도 보던 목록과 필터를 그대로 보여 주기 위해 앱 전체에서 기억한다.
  * - cache: 검색 조건별로 받아 둔 목록 (돌아왔을 때 바로 보여 주고 뒤에서 새로 받는다)
  * - lastListPath: 마지막으로 본 목록 주소 (필터가 담긴 쿼리 포함)
  */
-export const useRecipeList = () => {
+export const useRecipeList = (): UseRecipeList => {
   const cache = useState<Record<string, RecipeSummary[]>>('recipe-list-cache', () => ({}))
   const lastListPath = useState<string>('recipe-list-last-path', () => '/')
 

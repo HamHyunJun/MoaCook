@@ -1,6 +1,17 @@
+import type { ComputedRef, Ref } from 'vue'
+
+interface UseAdmin {
+  status: Ref<AdminStatus | undefined>
+  isAdmin: ComputedRef<boolean>
+  ensureStatus: () => Promise<AdminStatus>
+  refreshStatus: () => Promise<AdminStatus>
+  login: (input: AdminLoginInput) => Promise<void>
+  logout: () => Promise<void>
+}
+
 /** 관리자 로그인 상태 (서버 렌더링 때 받은 값을 화면 전체에서 함께 쓴다) */
-export const useAdmin = () => {
-  const status = useState<AdminStatus | null>('admin-status', () => null)
+export const useAdmin = (): UseAdmin => {
+  const status = useState<AdminStatus | undefined>('admin-status')
   const requestFetch = useRequestFetch()
 
   const isAdmin = computed<boolean>(() => status.value?.admin === true)

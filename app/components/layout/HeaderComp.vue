@@ -29,6 +29,11 @@
 const route = useRoute()
 const keyword = ref<string>('')
 
+const search = (): void => {
+  const q = keyword.value.trim()
+  navigateTo({ path: '/', query: q ? { q } : {} })
+}
+
 // 검색 결과 화면에서는 현재 검색어를 입력창에 보여 준다
 watch(
   () => route.fullPath,
@@ -38,11 +43,6 @@ watch(
   },
   { immediate: true },
 )
-
-const search = (): void => {
-  const q = keyword.value.trim()
-  navigateTo({ path: '/', query: q ? { q } : {} })
-}
 </script>
 
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@ const sessionSecret = (): string => {
 }
 
 /** 암호화된 쿠키에 관리자 로그인 상태를 저장한다 */
-export const useAdminSession = (event: H3Event) => {
+export const useAdminSession = (event: H3Event): ReturnType<typeof useSession<AdminSessionData>> => {
   return useSession<AdminSessionData>(event, {
     name: SESSION_NAME,
     password: sessionSecret(),
@@ -46,7 +46,7 @@ export const isAdminPassword = (input: string): boolean => {
   const { adminPassword } = useRuntimeConfig()
   if (!adminPassword) return false
 
-  const digest = (value: string) => createHash('sha256').update(value).digest()
+  const digest = (value: string): Buffer => createHash('sha256').update(value).digest()
   return timingSafeEqual(digest(input), digest(adminPassword))
 }
 

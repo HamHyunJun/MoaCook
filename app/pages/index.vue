@@ -80,6 +80,11 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+const { isAdmin } = useAdmin()
+const { cache, lastListPath } = useRecipeList()
+const nuxtApp = useNuxtApp()
+
 interface DifficultyOption {
   value: RecipeDifficulty
   label: string
@@ -97,10 +102,35 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
 ]
 const MAX_TIME_OPTIONS: number[] = [15, 30, 60]
 
-const route = useRoute()
-const { isAdmin } = useAdmin()
+// useFetch가 검색 조건과 캐시 키를 바로 읽으므로 그보다 앞에 둔다
+const toRouteQuery = (query: RecipeSearchQuery): Record<string, string> => {
+  const result: Record<string, string> = {}
+  if (query.q) result.q = query.q
+  if (query.category) result.category = query.category
+  if (query.difficulty) result.difficulty = String(query.difficulty)
+  if (query.maxTime) result.maxTime = String(query.maxTime)
+  return result
+}
 
 const searchQuery = computed<RecipeSearchQuery>(() => parseRecipeSearchQuery(route.query))
+const cacheKey = computed<string>(() => new URLSearchParams(toRouteQuery(searchQuery.value)).toString())
+
+const { data: recipes, error, status, refresh } = await useFetch<RecipeSummary[]>('/api/recipes', {
+  query: searchQuery,
+  lazy: true,
+  // 한 번 본 조건의 목록은 기억해 둔 것을 바로 보여 준다 (직접 새로고침할 때만 다시 받음)
+  getCachedData: (key, app, { cause }) => {
+    if (cause === 'refresh:manual') return undefined
+    return app.isHydrating ? app.payload.data[key] : cache.value[cacheKey.value]
+  },
+})
+
+// 다른 화면에서 돌아왔을 때는 기억해 둔 목록을 먼저 보여 주고, 바뀐 내용이 있으면 뒤에서 받아 갱신한다
+const restoredFromCache = !nuxtApp.isHydrating && Boolean(cache.value[cacheKey.value])
+
+onMounted(() => {
+  if (restoredFromCache) refresh()
+})
 
 const hasFilter = computed<boolean>(() =>
   Boolean(searchQuery.value.category || searchQuery.value.difficulty || searchQuery.value.maxTime),
@@ -121,45 +151,7 @@ const title = computed<string>(() => {
   return category ? `${category} 레시피` : '오늘은 뭘 만들어 볼까요?'
 })
 
-const toRouteQuery = (query: RecipeSearchQuery): Record<string, string> => {
-  const result: Record<string, string> = {}
-  if (query.q) result.q = query.q
-  if (query.category) result.category = query.category
-  if (query.difficulty) result.difficulty = String(query.difficulty)
-  if (query.maxTime) result.maxTime = String(query.maxTime)
-  return result
-}
-
-const { cache, lastListPath } = useRecipeList()
-const nuxtApp = useNuxtApp()
-const cacheKey = computed<string>(() => new URLSearchParams(toRouteQuery(searchQuery.value)).toString())
-
-const { data: recipes, error, status, refresh } = await useFetch<RecipeSummary[]>('/api/recipes', {
-  query: searchQuery,
-  lazy: true,
-  // 한 번 본 조건의 목록은 기억해 둔 것을 바로 보여 준다 (직접 새로고침할 때만 다시 받음)
-  getCachedData: (key, app, { cause }) => {
-    if (cause === 'refresh:manual') return undefined
-    return app.isHydrating ? app.payload.data[key] : cache.value[cacheKey.value]
-  },
-})
-
 const loading = computed<boolean>(() => !recipes.value && status.value === 'pending')
-
-watch(recipes, (list) => {
-  if (list) cache.value[cacheKey.value] = list
-}, { immediate: true })
-
-// 상세 화면의 '목록으로' 버튼이 이 주소(필터 포함)로 돌아올 수 있게 기억한다
-watch(() => route.fullPath, (path) => {
-  lastListPath.value = path
-}, { immediate: true })
-
-// 다른 화면에서 돌아왔을 때는 기억해 둔 목록을 먼저 보여 주고, 바뀐 내용이 있으면 뒤에서 받아 갱신한다
-const restoredFromCache = !nuxtApp.isHydrating && Boolean(cache.value[cacheKey.value])
-onMounted(() => {
-  if (restoredFromCache) refresh()
-})
 
 /** 검색 조건을 URL 쿼리에 반영한다 (뒤로 가기 기록이 쌓이지 않도록 replace) */
 const updateQuery = (patch: Partial<RecipeSearchQuery>): void => {
@@ -171,6 +163,15 @@ const resetQuery = (): void => {
 }
 
 useHead({ title: () => (searchQuery.value.q || searchQuery.value.category ? `${title.value} | MoaCook` : 'MoaCook') })
+
+watch(recipes, (list) => {
+  if (list) cache.value[cacheKey.value] = list
+}, { immediate: true })
+
+// 상세 화면의 '목록으로' 버튼이 이 주소(필터 포함)로 돌아올 수 있게 기억한다
+watch(() => route.fullPath, (path) => {
+  lastListPath.value = path
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>

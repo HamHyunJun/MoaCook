@@ -40,14 +40,14 @@ const { data, status } = useFetch<YoutubeSearchResult>('/api/youtube/search', {
   lazy: true,
 })
 
+const viewCountFormatter = new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 })
+
 // 서버 렌더링 시점(idle)도 불러오는 중으로 보여야 화면 복원(hydration) 결과가 서버와 같다
 const loading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending')
 const videos = computed<YoutubeVideo[]>(() => data.value?.videos ?? [])
 const searchUrl = computed<string>(() =>
   data.value?.searchUrl ?? `https://www.youtube.com/results?search_query=${encodeURIComponent(props.query)}`,
 )
-
-const viewCountFormatter = new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 })
 
 const formatViewCount = (count: number): string => {
   return `${viewCountFormatter.format(count)}회`

@@ -103,20 +103,6 @@ const { data: recipe, error } = await useFetch<Recipe>(() => `/api/recipes/${enc
 
 const summary = computed<RecipeSummary | undefined>(() => recipe.value ?? findSummary(id.value))
 
-const toPageError = (statusCode: number | undefined) => {
-  return createError({
-    statusCode: statusCode ?? 500,
-    statusMessage: statusCode === 404 ? '레시피를 찾을 수 없습니다.' : '레시피를 불러오지 못했습니다.',
-    fatal: true,
-  })
-}
-
-if (error.value) throw toPageError(error.value.statusCode)
-
-watch(error, (value) => {
-  if (value) showError(toPageError(value.statusCode))
-})
-
 const sortedSteps = computed<RecipeStep[]>(() =>
   [...(recipe.value?.steps ?? [])].sort((a, b) => a.order - b.order),
 )
@@ -124,6 +110,14 @@ const sortedSteps = computed<RecipeStep[]>(() =>
 // 목록에서 들어왔다면 브라우저 뒤로 가기로 돌아가서 필터와 스크롤 위치를 그대로 살린다.
 // 주소로 바로 들어왔다면 마지막으로 본 목록(없으면 전체 목록)으로 이동한다.
 const backHref = computed<string>(() => lastListPath.value)
+
+const toPageError = (statusCode: number | undefined): ReturnType<typeof createError> => {
+  return createError({
+    statusCode: statusCode ?? 500,
+    statusMessage: statusCode === 404 ? '레시피를 찾을 수 없습니다.' : '레시피를 불러오지 못했습니다.',
+    fatal: true,
+  })
+}
 
 const goBack = (): void => {
   const back = router.options.history.state.back
@@ -134,7 +128,13 @@ const goBack = (): void => {
   navigateTo(lastListPath.value)
 }
 
+if (error.value) throw toPageError(error.value.statusCode)
+
 useHead({ title: () => (summary.value ? `${summary.value.name} | MoaCook` : 'MoaCook') })
+
+watch(error, (value) => {
+  if (value) showError(toPageError(value.statusCode))
+})
 </script>
 
 <style lang="scss" scoped>

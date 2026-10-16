@@ -1,5 +1,12 @@
+interface UseRecipes {
+  createRecipe: (input: RecipeInput) => Promise<Recipe>
+  updateRecipe: (id: string, input: RecipeInput) => Promise<Recipe>
+  deleteRecipe: (id: string) => Promise<void>
+  uploadImage: (file: File) => Promise<ImageUploadResult>
+}
+
 /** 레시피 등록/수정/삭제와 이미지 업로드 요청 (목록·상세 조회는 페이지에서 useFetch 사용) */
-export const useRecipes = () => {
+export const useRecipes = (): UseRecipes => {
   const recipeUrl = (id: string): string => {
     return `/api/recipes/${encodeURIComponent(id)}`
   }
