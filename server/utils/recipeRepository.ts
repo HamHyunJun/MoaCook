@@ -32,32 +32,32 @@ const LOCAL_RECIPE_PREFIX = 'items'
 const LOCAL_SEEDED_KEY = 'seeded'
 
 const createLocalRepository = (): RecipeRepository => {
-  const storage = () => useStorage('recipes')
-  const key = (id: string) => `${LOCAL_RECIPE_PREFIX}:${id}`
+  const storage = (): ReturnType<typeof useStorage> => useStorage('recipes')
+  const key = (id: string): string => `${LOCAL_RECIPE_PREFIX}:${id}`
 
   return {
-    async list() {
+    async list(): Promise<Recipe[]> {
       const keys = await storage().getKeys(LOCAL_RECIPE_PREFIX)
       const recipes = await Promise.all(keys.map(itemKey => storage().getItem<Recipe>(itemKey)))
       return recipes.filter((recipe): recipe is Recipe => recipe !== null)
     },
-    async get(id) {
+    async get(id): Promise<Recipe | undefined> {
       return (await storage().getItem<Recipe>(key(id))) ?? undefined
     },
-    async save(recipe) {
+    async save(recipe): Promise<void> {
       await storage().setItem(key(recipe.id), recipe)
     },
-    async remove(id) {
+    async remove(id): Promise<boolean> {
       if (!(await storage().hasItem(key(id)))) return false
       await storage().removeItem(key(id))
       return true
     },
-    async getSeedVersion() {
+    async getSeedVersion(): Promise<number> {
       const value = await storage().getItem(LOCAL_SEEDED_KEY)
       if (typeof value === 'number') return value
       return value ? 1 : 0
     },
-    async setSeedVersion(version) {
+    async setSeedVersion(version): Promise<void> {
       await storage().setItem(LOCAL_SEEDED_KEY, version)
     },
   }
@@ -134,15 +134,15 @@ const createSupabaseRepository = (config: SupabaseConfig): RecipeRepository => {
   }
 
   return {
-    list: () => request('레시피 목록 조회', async () => {
+    list: (): Promise<Recipe[]> => request('레시피 목록 조회', async () => {
       const rows = await rest<RecipeRow[]>('/recipes', { query: { select: '*', order: 'created_at.asc' } })
       return rows.map(fromRow)
     }),
-    get: id => request('레시피 조회', async () => {
+    get: (id): Promise<Recipe | undefined> => request('레시피 조회', async () => {
       const rows = await rest<RecipeRow[]>('/recipes', { query: { select: '*', id: `eq.${id}` } })
       return rows[0] ? fromRow(rows[0]) : undefined
     }),
-    save: recipe => request('레시피 저장', async () => {
+    save: (recipe): Promise<void> => request('레시피 저장', async () => {
       await rest('/recipes', {
         method: 'POST',
         query: { on_conflict: 'id' },
@@ -150,7 +150,7 @@ const createSupabaseRepository = (config: SupabaseConfig): RecipeRepository => {
         body: toRow(recipe),
       })
     }),
-    remove: id => request('레시피 삭제', async () => {
+    remove: (id): Promise<boolean> => request('레시피 삭제', async () => {
       const rows = await rest<Pick<RecipeRow, 'id'>[]>('/recipes', {
         method: 'DELETE',
         query: { id: `eq.${id}`, select: 'id' },
@@ -158,11 +158,11 @@ const createSupabaseRepository = (config: SupabaseConfig): RecipeRepository => {
       })
       return rows.length > 0
     }),
-    getSeedVersion: () => request('초기 데이터 버전 조회', async () => {
+    getSeedVersion: (): Promise<number> => request('초기 데이터 버전 조회', async () => {
       const rows = await rest<{ value: number }[]>('/app_settings', { query: { select: 'value', key: `eq.${SEED_VERSION_KEY}` } })
       return Number(rows[0]?.value ?? 0)
     }),
-    setSeedVersion: version => request('초기 데이터 버전 저장', async () => {
+    setSeedVersion: (version): Promise<void> => request('초기 데이터 버전 저장', async () => {
       await rest('/app_settings', {
         method: 'POST',
         query: { on_conflict: 'key' },

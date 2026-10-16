@@ -16,8 +16,8 @@
 definePageMeta({ middleware: 'admin' })
 
 const route = useRoute()
-const id = computed<string>(() => String(route.params.id))
 const { updateRecipe } = useRecipes()
+const id = computed<string>(() => String(route.params.id))
 
 const { data: recipe, error } = await useFetch<Recipe>(() => `/api/recipes/${encodeURIComponent(id.value)}`)
 

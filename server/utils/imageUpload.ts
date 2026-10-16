@@ -15,7 +15,7 @@ export const MAX_IMAGE_SIZE = 4 * 1024 * 1024
 
 export const UPLOAD_FILE_NAME_PATTERN = /^[0-9a-f-]{36}\.(jpg|png|webp|gif)$/
 
-export const uploadStorage = () => {
+export const uploadStorage = (): ReturnType<typeof useStorage> => {
   return useStorage('uploads')
 }
 

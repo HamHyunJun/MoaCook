@@ -114,6 +114,28 @@
 </template>
 
 <script setup lang="ts">
+const props = withDefaults(defineProps<{
+  /** 수정할 레시피 (없으면 새 레시피 등록) */
+  recipe?: Recipe
+  submitLabel?: string
+  submitting?: boolean
+  /** 서버에서 받은 오류 메시지 */
+  serverErrors?: string[]
+  cancelTo?: string
+}>(), {
+  recipe: undefined,
+  submitLabel: '저장',
+  submitting: false,
+  serverErrors: () => [],
+  cancelTo: '/admin/recipes',
+})
+
+const emit = defineEmits<{
+  submit: [input: RecipeInput]
+}>()
+
+const { uploadImage } = useRecipes()
+
 interface IngredientRow {
   key: string
   id?: string
@@ -140,29 +162,7 @@ interface RecipeFormState {
   youtubeQuery: string
 }
 
-const props = withDefaults(defineProps<{
-  /** 수정할 레시피 (없으면 새 레시피 등록) */
-  recipe?: Recipe
-  submitLabel?: string
-  submitting?: boolean
-  /** 서버에서 받은 오류 메시지 */
-  serverErrors?: string[]
-  cancelTo?: string
-}>(), {
-  recipe: undefined,
-  submitLabel: '저장',
-  submitting: false,
-  serverErrors: () => [],
-  cancelTo: '/admin/recipes',
-})
-
-const emit = defineEmits<{
-  submit: [input: RecipeInput]
-}>()
-
 const DIFFICULTIES: RecipeDifficulty[] = [1, 2, 3]
-
-const { uploadImage } = useRecipes()
 
 let rowSeq = 0
 const nextKey = (): string => {
